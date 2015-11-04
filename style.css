@@ -1,0 +1,41 @@
+#scoreboard{
+	position: relative;
+}
+#home-score, #away-score, #down, #yards-to-go{
+	position: absolute;
+	font-size: 90px;
+	color: yellow;
+}
+#home-score{
+	top:90px;
+	left:40px;
+}
+#away-score{
+	top:90px;
+	left:670px;
+}
+#down{
+	top:220px;
+	left:75px;
+}
+#yards-to-go{
+	top:220px;
+	left:620px;
+}
+
+#field{
+	background-image: url('theField.png');
+	background-size: 800px 377px;
+	background-repeat: no-repeat;
+	display:block;
+}
+#run-plays, #pass-plays{
+	width: 800px;
+	display:block;
+	text-align: center;
+}
+#big-back, #med-back, #small-back, #big-receiver, #med-receiver, #small-receiver{
+	font-size: 20px;
+	text-align: center;
+	margin: 5px 20px;
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Football Game</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="jquery.min.js"></script>
+	<script src="script.js"></script>
+</head>
+<body>
+	<div id="scoreboard">
+		<img src="scoreboard.jpg.png">
+		<div id="home-score">00</div>
+		<div id="away-score">00</div>
+		<div id="down">1</div>
+		<div id="yards-to-go">10</div>
+
+	</div>
+	<canvas id="field" width='800px' height='377px'></canvas>
+	<div id="run-plays">
+		<button id="big-back">Run with best back</button>
+		<button id="med-back">Run with average back</button>
+		<button id="small-back">Run with worst back</button>
+	</div>
+	<div id='pass-plays'>
+		<button id="big-receiver">Throw to best receiver</button>
+		<button id="med-receiver">Throw to average receiver</button>
+		<button id="small-receiver">Throw to worst receiver</button>
+	</div>
+</body>
+</html>
