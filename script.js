@@ -1,13 +1,12 @@
 	
 $(document).ready(function(){
 	var currYardLine = 20;
-	var bigRunnerEnergy = 100;
-	var medRunnerEnergy = 100;
-	var smallRunnerEnergy = 100;
-	var bigReceiverEnergy = 100;
-	var medReceiverEnergy = 100;
-	var smallReceiverEnergy = 100;
-
+	// var bigRunnerEnergy = 100;
+	// var medRunnerEnergy = 100;
+	// var smallRunnerEnergy = 100;
+	// var bigReceiverEnergy = 100;
+	// var medReceiverEnergy = 100;
+	// var smallReceiverEnergy = 100;
 	var currDown = 1;
 	var firstDownMarker = currYardLine + 10;
 	var yardsToGo = 10;
@@ -66,6 +65,10 @@ $(document).ready(function(){
 			alert('TOUCHDOWN!!!')
 			currYardLine = 80;
 			firstDownMarker = currYardLine - 10;
+			currDown = 1;
+			yardsToGo = 10;
+			$('#down').text(currDown);
+			$('#yards-to-go').text(yardsToGo);
 			context.clearRect(0,0,1000,1000);
 			$('.button').attr('poss', 'away')
 		}else if(position<=0){
@@ -73,12 +76,15 @@ $(document).ready(function(){
 			alert('Computer has Scored');
 			currYardLine = 20;
 			firstDownmarker = currYardLine + 10;
+			currDown = 1;
+			yardsToGo = 10;
+			$('#down').text(currDown);
+			$('#yards-to-go').text(yardsToGo);
 			context.clearRect(0,0,1000,1000);
 			$('.button').attr('poss', 'home')
 		}
 	}
 	function updateAwayDown(yards){
-		console.log(yards);
 		if(currYardLine<=firstDownMarker){
 			currDown = 1;
 			yardsToGo = 10
@@ -144,7 +150,7 @@ $(document).ready(function(){
 		
 	}
 	function updatePassYardage(yards){
-		var poss = $('#big-back').attr('poss');
+		var poss = checkPoss();
 		if(poss == 'home'){
 			drawPass(yards);
 			currYardLine += yards;
@@ -158,11 +164,11 @@ $(document).ready(function(){
 		
 	}
 	$('#big-back').click(function(){	
-		var yards = 50;
+		var yards = 7;
 		updateRunYardage(yards);
 	});
 	$('#med-back').click(function(){
-		var yards = 7;
+		var yards = 3;
 		updateRunYardage(yards);
 	});
 	$('#small-back').click(function(){
