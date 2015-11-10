@@ -34,57 +34,72 @@ $(document).ready(function(){
 		context.bezierCurveTo(currStartYardLine,180,currStartYardLine+(6*yards),180,currStartYardLine+(6*yards),200);
 		context.stroke();
 	};
-	// function drawAwayPass(yards){
-	// 	var canvas = $('#field')[0];
-	// 	var context = canvas.getContext('2d');
-	// 	var currStartYardLine = currYardLine*6+88;
-	// 	var newStartYardLine = (-6*yards) +currStartYardLine;
-	// 	context.beginPath();
-	// 	context.lineWidth = 10;
-	// 	context.moveTo(currStartYardLine,200);
-	// 	context.bezierCurveTo(currStartYardLine,180,currStartYardLine-(6*yards),180,currStartYardLine-(6*yards),200);
-	// 	context.stroke();
-	// }
-	// function drawAwayRun(yards){
-	// 	var canvas = $('#field')[0];
-	// 	var context = canvas.getContext('2d');
-	// 	var currStartYardLine = (6*currYardLine)+88;
-	// 	var newStartYardLine = (-6*yards) + currStartYardLine;
-	// 	context.beginPath();
-	// 	context.lineWidth = 10;
-	// 	context.moveTo(currStartYardLine,200);
-	// 	context.lineTo((-6*yards)+currStartYardLine,200);
-	// 	context.stroke();
-	// }
+	function drawAwayPass(yards){
+		var canvas = $('#field')[0];
+		var context = canvas.getContext('2d');
+		var currStartYardLine = currYardLine*6+88;
+		var newStartYardLine = (-6*yards) +currStartYardLine;
+		context.beginPath();
+		context.lineWidth = 10;
+		context.moveTo(currStartYardLine,200);
+		context.bezierCurveTo(currStartYardLine,180,currStartYardLine-(6*yards),180,currStartYardLine-(6*yards),200);
+		context.stroke();
+		console.log(currYardLine);
+	}
+	function drawAwayRun(yards){
+		var canvas = $('#field')[0];
+		var context = canvas.getContext('2d');
+		var currStartYardLine = (6*currYardLine)+88;
+		var newStartYardLine = (-6*yards) + currStartYardLine;
+		context.beginPath();
+		context.lineWidth = 10;
+		context.moveTo(currStartYardLine,200);
+		context.lineTo((-6*yards)+currStartYardLine,200);
+		context.stroke();
+		console.log(currYardLine);
+	}
 	function checkTouchdown(position){
 		var canvas = $('#field')[0];
 		var context = canvas.getContext('2d');
 		if(position>=100){
 			$('#home-score').text(Number($('#home-score').text())+7);
 			alert('TOUCHDOWN!!!')
-			// currYardLine = 80;
-			// firstDownMarker = currYardLine - 10;
+			currYardLine = 80;
+			firstDownMarker = currYardLine - 10;
 			context.clearRect(0,0,1000,1000);
 			$('.button').attr('poss', 'away')
-		// }else if(position<=0){
-		// 	$('#away-score').text(Number($('#away-score').text())+7);
-		// 	currYardLine = 20;
-		// 	firstDownmarker = currYardLine + 10;
-		// 	context.clearRect(0,0,1000,1000);
-		// 	$('.button').attr('poss', 'home')
-		// }
+		}else if(position<=0){
+			$('#away-score').text(Number($('#away-score').text())+7);
+			alert('Computer has Scored');
+			currYardLine = 20;
+			firstDownmarker = currYardLine + 10;
+			context.clearRect(0,0,1000,1000);
+			$('.button').attr('poss', 'home')
+		}
 	}
-	// function updateAwayDown(yards){
-	// 	console.log(yards);
-	// 	if(currYardLine<=firstDownMarker){
-	// 		currDown = 1;
-	// 		yardsToGo = 10
-	// 		fistDownMarker = currYardLine - yardsToGo;
-	// 	}else if(currDown == 1){
-	// 		currDown = 2;
-	// 		yardsToGo = yardsToGo - yards;
-	// 	}
-	// }
+	function updateAwayDown(yards){
+		console.log(yards);
+		if(currYardLine<=firstDownMarker){
+			currDown = 1;
+			yardsToGo = 10
+			fistDownMarker = currYardLine - yardsToGo;
+		}else if(currDown == 1){
+			currDown = 2;
+			yardsToGo = yardsToGo - yards;
+		}else if(currDown == 2){
+			currDown = 3;
+			yardsToGo = yardsToGo - yards;
+		}else if(currDown == 3){
+			currDown = 4
+			yardsToGo = yardsToGo - yards;
+		}else if(currDown == 4){
+			$('.button').attr('poss','home');
+			currDown = 1;
+			yardsToGo = 10;
+		}
+		$('#down').text(currDown);
+		$('#yards-to-go').text(yardsToGo);
+	}
 	function updateDown(yards){
 		if(currYardLine>=firstDownMarker){
 			currDown = 1;
@@ -100,6 +115,10 @@ $(document).ready(function(){
 		}else if(currDown == 3){
 			currDown = 4
 			yardsToGo = yardsToGo - yards;
+		}else if(currDown == 4){
+			$('.button').attr('poss','away');
+			currDown = 1;
+			yardsToGo = 10;
 		}
 		$('#down').text(currDown);
 		$('#yards-to-go').text(yardsToGo);
@@ -112,18 +131,31 @@ $(document).ready(function(){
 
 	function updateRunYardage(yards){
 		var poss = checkPoss();
-		console.log(poss);
-		drawRun(yards);
-		currYardLine += yards;
-		updateDown(yards);
+		if(poss == 'home'){
+			drawRun(yards);
+			currYardLine += yards;
+			updateDown(yards);
+		}else if(poss == 'away'){
+			drawAwayRun(yards);
+			currYardLine -= yards;
+			updateAwayDown(yards);
+		}
 		checkTouchdown(currYardLine);
 		
 	}
 	function updatePassYardage(yards){
-		drawPass(yards);
-		currYardLine += yards;
+		var poss = $('#big-back').attr('poss');
+		if(poss == 'home'){
+			drawPass(yards);
+			currYardLine += yards;
+			updateDown(yards);
+		}else if(poss == 'away'){
+			drawAwayPass(yards);
+			currYardLine -= yards;
+			updateAwayDown(yards);
+		}
 		checkTouchdown(currYardLine);
-		updateDown(yards);
+		
 	}
 	$('#big-back').click(function(){	
 		var yards = 50;
@@ -134,7 +166,7 @@ $(document).ready(function(){
 		updateRunYardage(yards);
 	});
 	$('#small-back').click(function(){
-		var yards = 3;
+		var yards = 1;
 		updateRunYardage(yards);
 	});
 	$('#big-receiver').click(function(){
