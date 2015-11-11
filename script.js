@@ -262,6 +262,8 @@ $(document).ready(function(){
 		clearField();
 		$('.button').attr('poss', 'home');
 		}
+		$('#down').text(currDown);
+		$('#yards-to-go').text(yardsToGo);
 		console.log(distance)
 	})
 });
