@@ -43,7 +43,6 @@ $(document).ready(function(){
 		context.moveTo(currStartYardLine,200);
 		context.bezierCurveTo(currStartYardLine,180,currStartYardLine-(6*yards),180,currStartYardLine-(6*yards),200);
 		context.stroke();
-		console.log(currYardLine);
 	}
 	function drawAwayRun(yards){
 		var canvas = $('#field')[0];
@@ -55,11 +54,13 @@ $(document).ready(function(){
 		context.moveTo(currStartYardLine,200);
 		context.lineTo((-6*yards)+currStartYardLine,200);
 		context.stroke();
-		console.log(currYardLine);
 	}
-	function checkTouchdown(position){
+	function clearField(){
 		var canvas = $('#field')[0];
 		var context = canvas.getContext('2d');
+		context.clearRect(0,0,1000,1000);
+	}
+	function checkTouchdown(position){
 		if(position>=100){
 			$('#home-score').text(Number($('#home-score').text())+7);
 			alert('TOUCHDOWN!!!')
@@ -68,63 +69,64 @@ $(document).ready(function(){
 			currDown = 1;
 			yardsToGo = 10;
 			$('#down').text(currDown);
-			$('#yards-to-go').text(yardsToGo);
-			context.clearRect(0,0,1000,1000);
+			clearField();
+			$('#yards-to-go').text(yardsToGo);			
 			$('.button').attr('poss', 'away')
 		}else if(position<=0){
 			$('#away-score').text(Number($('#away-score').text())+7);
-			alert('Computer has Scored');
+			alert('The Visitor has Scored');
 			currYardLine = 20;
-			firstDownmarker = currYardLine + 10;
+			firstDownMarker = currYardLine + 10;
 			currDown = 1;
 			yardsToGo = 10;
 			$('#down').text(currDown);
 			$('#yards-to-go').text(yardsToGo);
-			context.clearRect(0,0,1000,1000);
+			clearField();
 			$('.button').attr('poss', 'home')
 		}
 	}
-	function updateAwayDown(yards){
-		if(currYardLine<=firstDownMarker){
-			currDown = 1;
-			yardsToGo = 10
-			fistDownMarker = currYardLine - yardsToGo;
-		}else if(currDown == 1){
-			currDown = 2;
-			yardsToGo = yardsToGo - yards;
-		}else if(currDown == 2){
-			currDown = 3;
-			yardsToGo = yardsToGo - yards;
-		}else if(currDown == 3){
-			currDown = 4
-			yardsToGo = yardsToGo - yards;
-		}else if(currDown == 4){
-			$('.button').attr('poss','home');
-			currDown = 1;
-			yardsToGo = 10;
-		}
-		$('#down').text(currDown);
-		$('#yards-to-go').text(yardsToGo);
-	}
-	function updateDown(yards){
-		if(currYardLine>=firstDownMarker){
-			currDown = 1;
-			yardsToGo = 10;
-			firstDownMarker = currYardLine + yardsToGo;	
-		}
-		else if(currDown == 1){
-			currDown = 2;
-			yardsToGo = yardsToGo - yards;
-		}else if(currDown == 2){
-			currDown = 3;
-			yardsToGo = yardsToGo - yards;
-		}else if(currDown == 3){
-			currDown = 4
-			yardsToGo = yardsToGo - yards;
-		}else if(currDown == 4){
-			$('.button').attr('poss','away');
-			currDown = 1;
-			yardsToGo = 10;
+	function updateDown(yards,poss){
+		if(poss == 'home'){
+			if(currYardLine>=firstDownMarker){
+				currDown = 1;
+				yardsToGo = 10;
+				firstDownMarker = currYardLine + yardsToGo;	
+			}
+			else if(currDown == 1){
+				currDown = 2;
+				yardsToGo = yardsToGo - yards;
+			}else if(currDown == 2){
+				currDown = 3;
+				yardsToGo = yardsToGo - yards;
+			}else if(currDown == 3){
+				currDown = 4
+				yardsToGo = yardsToGo - yards;
+			}else if(currDown == 4){
+				$('.button').attr('poss','away');
+				currDown = 1;
+				yardsToGo = 10;
+				clearField();
+			}
+		}else if(poss == 'away'){
+			if(currYardLine<=firstDownMarker){
+				currDown = 1;
+				yardsToGo = 10;
+				firstDownMarker = currYardLine - yardsToGo;
+			}else if(currDown == 1){
+				currDown = 2;
+				yardsToGo = yardsToGo - yards;
+			}else if(currDown == 2){
+				currDown = 3;
+				yardsToGo = yardsToGo - yards;
+			}else if(currDown == 3){
+				currDown = 4;
+				yardsToGo = yardsToGo - yards;
+			}else if(currDown == 4){
+				$('.button').attr('poss','home');
+				currDown = 1;
+				yardsToGo = 10;
+				clearField();
+			}
 		}
 		$('#down').text(currDown);
 		$('#yards-to-go').text(yardsToGo);
@@ -135,57 +137,59 @@ $(document).ready(function(){
 		return possession;
 	}
 
-	function updateRunYardage(yards){
-		var poss = checkPoss();
+	function updateRunYardage(yards,poss){
 		if(poss == 'home'){
 			drawRun(yards);
 			currYardLine += yards;
-			updateDown(yards);
 		}else if(poss == 'away'){
 			drawAwayRun(yards);
 			currYardLine -= yards;
-			updateAwayDown(yards);
 		}
+		updateDown(yards,poss)
 		checkTouchdown(currYardLine);
 		
 	}
-	function updatePassYardage(yards){
-		var poss = checkPoss();
+	function updatePassYardage(yards,poss){
 		if(poss == 'home'){
 			drawPass(yards);
 			currYardLine += yards;
-			updateDown(yards);
 		}else if(poss == 'away'){
 			drawAwayPass(yards);
 			currYardLine -= yards;
-			updateAwayDown(yards);
 		}
+		updateDown(yards,poss)
 		checkTouchdown(currYardLine);
 		
 	}
 	$('#big-back').click(function(){	
 		var yards = 7;
-		updateRunYardage(yards);
+		var poss = checkPoss();
+		updateRunYardage(yards,poss);
 	});
 	$('#med-back').click(function(){
 		var yards = 3;
-		updateRunYardage(yards);
+		var poss = checkPoss();
+		updateRunYardage(yards,poss);
 	});
 	$('#small-back').click(function(){
 		var yards = 1;
-		updateRunYardage(yards);
+		var poss = checkPoss();
+		updateRunYardage(yards,poss);
 	});
 	$('#big-receiver').click(function(){
 		var yards = 25;
-		updatePassYardage(yards)
+		var poss = checkPoss();
+		updatePassYardage(yards,poss)
 	});
 	$('#med-receiver').click(function(){
 		var yards = 15;
-		updatePassYardage(yards)
+		var poss = checkPoss();
+		updatePassYardage(yards,poss)
 	});
 	$('#small-receiver').click(function(){
 		var yards = 5;
-		updatePassYardage(yards)
+		var poss = checkPoss();
+		updatePassYardage(yards,poss)
 	});
 
 });
