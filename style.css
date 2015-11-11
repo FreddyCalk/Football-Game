@@ -29,13 +29,14 @@
 	background-repeat: no-repeat;
 	display:block;
 }
-#run-plays, #pass-plays{
+#run-plays, #pass-plays, #special-teams{
 	width: 800px;
 	display:block;
 	text-align: center;
+	font-size: 20px;
 }
-#big-back, #med-back, #small-back, #big-receiver, #med-receiver, #small-receiver{
+.button{
 	font-size: 20px;
 	text-align: center;
-	margin: 5px 20px;
+	margin: 5px 10px;
 }

@@ -72,6 +72,7 @@ $(document).ready(function(){
 			clearField();
 			$('#yards-to-go').text(yardsToGo);			
 			$('.button').attr('poss', 'away')
+			$('#special-teams').hide();
 		}else if(position<=0){
 			$('#away-score').text(Number($('#away-score').text())+7);
 			alert('The Visitor has Scored');
@@ -83,6 +84,7 @@ $(document).ready(function(){
 			$('#yards-to-go').text(yardsToGo);
 			clearField();
 			$('.button').attr('poss', 'home')
+			$('#special-teams').hide();
 		}
 	}
 	function updateDown(yards,poss){
@@ -90,7 +92,8 @@ $(document).ready(function(){
 			if(currYardLine>=firstDownMarker){
 				currDown = 1;
 				yardsToGo = 10;
-				firstDownMarker = currYardLine + yardsToGo;	
+				firstDownMarker = currYardLine + yardsToGo;
+				$('#special-teams').hide();	
 			}
 			else if(currDown == 1){
 				currDown = 2;
@@ -101,17 +104,20 @@ $(document).ready(function(){
 			}else if(currDown == 3){
 				currDown = 4
 				yardsToGo = yardsToGo - yards;
+				$('#special-teams').show();
 			}else if(currDown == 4){
 				$('.button').attr('poss','away');
 				currDown = 1;
 				yardsToGo = 10;
 				clearField();
+				$('#special-teams').hide();
 			}
 		}else if(poss == 'away'){
 			if(currYardLine<=firstDownMarker){
 				currDown = 1;
 				yardsToGo = 10;
 				firstDownMarker = currYardLine - yardsToGo;
+				$('#special-teams').hide();
 			}else if(currDown == 1){
 				currDown = 2;
 				yardsToGo = yardsToGo - yards;
@@ -121,11 +127,13 @@ $(document).ready(function(){
 			}else if(currDown == 3){
 				currDown = 4;
 				yardsToGo = yardsToGo - yards;
+				$('#special-teams').show();
 			}else if(currDown == 4){
 				$('.button').attr('poss','home');
 				currDown = 1;
 				yardsToGo = 10;
 				clearField();
+				$('#special-teams').hide();
 			}
 		}
 		$('#down').text(currDown);
@@ -191,7 +199,47 @@ $(document).ready(function(){
 		var poss = checkPoss();
 		updatePassYardage(yards,poss)
 	});
+	$('#field-goal').click(function(){
+		var chances = Math.random()
+		console.log(chances)
+		var poss = checkPoss();
+		if(poss == 'home'){
+			if(currYardLine>80){
+				$('#home-score').text(Number($('#home-score').text())+3);
+				currYardLine = 80;
+			}else if((currYardLine>70)&&(chances<0.90)){
+				$('#home-score').text(Number($('#home-score').text())+3);
+				currYardLine = 80;
+			}else if((currYardLine>60)&&(chances<0.6)){
+				$('#home-score').text(Number($('#home-score').text())+3);
+				currYardLine = 80;
+			}
+			firstDownMarker = currYardLine - 10;
+			currDown = 1;
+			yardsToGo = 10;
+			$('.button').attr('poss', 'away');
+		}else if(poss == 'away'){
+			if(currYardLine<20){
+				$('#home-score').text(Number($('#home-score').text())+3);
+				currYardLine = 20;
+			}else if((currYardLine<30)&&(chances<0.90)){
+				$('#home-score').text(Number($('#home-score').text())+3);
+				currYardLine = 20;
+			}else if((currYardLine<40)&&(chances<0.6)){
+				$('#home-score').text(Number($('#home-score').text())+3);
+				currYardLine = 20;
+			}
+			firstDownMarker = currYardLine + 10;
+			currDown = 1;
+			yardsToGo = 10;
+			$('.button').attr('poss', 'home');
+		}
+		$('#down').text(currDown);
+		$('#yards-to-go').text(yardsToGo);
+		clearField();
+	
 
+	})
 });
 
 
