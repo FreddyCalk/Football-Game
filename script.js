@@ -237,8 +237,32 @@ $(document).ready(function(){
 		$('#down').text(currDown);
 		$('#yards-to-go').text(yardsToGo);
 		clearField();
-	
-
+	})
+	$('#punt').click(function(){
+		var distance = Math.floor(Math.random()*20)+40;
+		var poss = checkPoss();
+		if(poss == 'home'){
+			currYardLine+=distance;
+			if(currYardLine>=100){
+				currYardLine = 80;
+			}
+		firstDownMarker = currYardLine - 10;
+		currDown = 1;
+		yardsToGo = 10;
+		clearField();
+		$('.button').attr('poss', 'away');
+		}else if(poss == 'away'){
+			currYardLine-=distance;
+			if(currYardLine<=0){
+				currYardLine = 20;
+			}
+		firstDownMarker = currYardLine + 10;
+		currDown = 1;
+		yardsToGo = 10;
+		clearField();
+		$('.button').attr('poss', 'home');
+		}
+		console.log(distance)
 	})
 });
 
