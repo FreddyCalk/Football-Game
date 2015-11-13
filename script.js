@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
 	var currYardLine = 20;
 	// var bigRunnerEnergy = 100;
@@ -10,7 +9,8 @@ $(document).ready(function(){
 	var currDown = 1;
 	var firstDownMarker = currYardLine + 10;
 	var yardsToGo = 10;
-
+	var latLoc = 190;
+	var moveRight = false;
 	function drawRun(yards,poss){
 		var canvas = $('#field')[0];
 		var context = canvas.getContext('2d');
@@ -20,13 +20,13 @@ $(document).ready(function(){
 		if(poss == 'home'){
 			currStartYardLine = (currYardLine*6)+88;
 			newStartYardLine = (6*yards) + currStartYardLine;
-			context.moveTo(currStartYardLine,200);
-			context.lineTo((6*yards)+currStartYardLine,200);
+			context.moveTo(currStartYardLine,latLoc);
+			context.lineTo((6*yards)+currStartYardLine,latLoc);
 		}else if(poss == 'away'){
 			currStartYardLine = (6*currYardLine)+88;
 			newStartYardLine = (-6*yards) + currStartYardLine;
-			context.moveTo(currStartYardLine,200);
-			context.lineTo((-6*yards)+currStartYardLine,200);
+			context.moveTo(currStartYardLine,latLoc);
+			context.lineTo((-6*yards)+currStartYardLine,latLoc);
 		}
 		context.stroke();
 	}
@@ -40,13 +40,13 @@ $(document).ready(function(){
 		if(poss == 'home'){
 			currStartYardLine = (currYardLine*6)+88;
 			newStartYardLine = (6*yards) + currStartYardLine;	
-			context.moveTo(currStartYardLine,200);
-			context.bezierCurveTo(currStartYardLine,180,currStartYardLine+(6*yards),180,currStartYardLine+(6*yards),200);
+			context.moveTo(currStartYardLine,latLoc);
+			context.bezierCurveTo(currStartYardLine,latLoc-20,currStartYardLine+(6*yards),latLoc-20,currStartYardLine+(6*yards),latLoc);
 		}else if(poss == 'away'){
 			currStartYardLine = currYardLine*6+88;
 			newStartYardLine = (-6*yards) +currStartYardLine;
-			context.moveTo(currStartYardLine,200);
-			context.bezierCurveTo(currStartYardLine,180,currStartYardLine-(6*yards),180,currStartYardLine-(6*yards),200);
+			context.moveTo(currStartYardLine,latLoc);
+			context.bezierCurveTo(currStartYardLine,latLoc-20,currStartYardLine-(6*yards),latLoc-20,currStartYardLine-(6*yards),latLoc);
 		
 		}
 		context.stroke();
@@ -62,13 +62,13 @@ $(document).ready(function(){
 		if(poss == 'home'){
 			currStartYardLine = (currYardLine*6)+88;
 			newStartYardLine = (6*yards) + currStartYardLine;	
-			context.moveTo(currStartYardLine,200);
-			context.bezierCurveTo(currStartYardLine,75,currStartYardLine+(6*yards),75,currStartYardLine+(6*yards),200);
+			context.moveTo(currStartYardLine,latLoc);
+			context.bezierCurveTo(currStartYardLine,latLoc-125,currStartYardLine+(6*yards),latLoc-125,currStartYardLine+(6*yards),latLoc);
 		}else if(poss == 'away'){
 			currStartYardLine = currYardLine*6+88;
 			newStartYardLine = (-6*yards) +currStartYardLine;
-			context.moveTo(currStartYardLine,200);
-			context.bezierCurveTo(currStartYardLine,75,currStartYardLine-(6*yards),75,currStartYardLine-(6*yards),200);
+			context.moveTo(currStartYardLine,latLoc);
+			context.bezierCurveTo(currStartYardLine,latLoc-125,currStartYardLine-(6*yards),latLoc-125,currStartYardLine-(6*yards),latLoc);
 		}
 		context.stroke();
 	}
@@ -76,6 +76,7 @@ $(document).ready(function(){
 		var canvas = $('#field')[0];
 		var context = canvas.getContext('2d');
 		context.clearRect(0,0,1000,1000);
+		latLoc = 190;
 	}
 	function checkTouchdown(position){
 		if(position>=100){
@@ -83,34 +84,28 @@ $(document).ready(function(){
 			alert('TOUCHDOWN!!!')
 			currYardLine = 80;
 			firstDownMarker = currYardLine - 10;
-			currDown = 1;
-			yardsToGo = 10;
+			firstDown()
 			$('#down').text(currDown);
 			clearField();
 			$('#yards-to-go').text(yardsToGo);			
 			$('.button').attr('poss', 'away')
-			$('#special-teams').hide();
 		}else if(position<=0){
 			$('#away-score').text(Number($('#away-score').text())+7);
 			alert('The Visitor has Scored');
 			currYardLine = 20;
 			firstDownMarker = currYardLine + 10;
-			currDown = 1;
-			yardsToGo = 10;
+			firstDown()
 			$('#down').text(currDown);
 			$('#yards-to-go').text(yardsToGo);
 			clearField();
 			$('.button').attr('poss', 'home')
-			$('#special-teams').hide();
 		}
 	}
 	function updateDown(yards,poss){
 		if(poss == 'home'){
 			if(currYardLine>=firstDownMarker){
-				currDown = 1;
-				yardsToGo = 10;
+				firstDown()
 				firstDownMarker = currYardLine + yardsToGo;
-				$('#special-teams').hide();	
 			}
 			else if(currDown == 1){
 				currDown = 2;
@@ -124,15 +119,12 @@ $(document).ready(function(){
 				$('#special-teams').show();
 			}else if(currDown == 4){
 				$('.button').attr('poss','away');
-				currDown = 1;
-				yardsToGo = 10;
+				firstDown()
 				clearField();
-				$('#special-teams').hide();
 			}
 		}else if(poss == 'away'){
 			if(currYardLine<=firstDownMarker){
-				currDown = 1;
-				yardsToGo = 10;
+				firstDown()
 				firstDownMarker = currYardLine - yardsToGo;
 				$('#special-teams').hide();
 			}else if(currDown == 1){
@@ -147,22 +139,39 @@ $(document).ready(function(){
 				$('#special-teams').show();
 			}else if(currDown == 4){
 				$('.button').attr('poss','home');
-				currDown = 1;
-				yardsToGo = 10;
+				firstDown()
 				clearField();
-				$('#special-teams').hide();
 			}
 		}
 		$('#down').text(currDown);
 		$('#yards-to-go').text(yardsToGo);
 	}
-
 	function checkPoss(){
 		var possession = $('#big-back').attr('poss');
 		return possession;
 	}
-
+	function firstDown(){
+		currDown = 1;
+		yardsToGo = 10;
+		$('#special-teams').hide();
+	}
+	function lateralLocation(){
+		console.log(latLoc)
+		var leftHash = 150;
+		var rightHash = 230;
+		if(latLoc === rightHash){
+			moveRight = true;
+		}else if(latLoc === leftHash){
+			moveRight = false;
+		}
+		if(moveRight){
+			latLoc -= 10;
+		}else if(!moveRight){
+			latLoc += 10;
+		}
+	}
 	function updateRunYardage(yards,poss){
+		lateralLocation()
 		drawRun(yards,poss);
 		if(poss == 'home'){
 		currYardLine += yards;
@@ -170,10 +179,10 @@ $(document).ready(function(){
 			currYardLine -= yards;
 		}
 		updateDown(yards,poss)
-		checkTouchdown(currYardLine);
-		
+		checkTouchdown(currYardLine);		
 	}
 	function updatePassYardage(yards,poss){
+		lateralLocation()
 		drawPass(yards,poss);
 		if(poss == 'home'){
 			currYardLine += yards;
@@ -181,8 +190,7 @@ $(document).ready(function(){
 			currYardLine -= yards;
 		}
 		updateDown(yards,poss)
-		checkTouchdown(currYardLine);
-		
+		checkTouchdown(currYardLine);		
 	}
 	$('#big-back').click(function(){	
 		var yards = 7;
@@ -232,8 +240,7 @@ $(document).ready(function(){
 				currYardLine = 80;
 			}
 			firstDownMarker = currYardLine - 10;
-			currDown = 1;
-			yardsToGo = 10;
+			firstDown();
 			$('.button').attr('poss', 'away');
 		}else if(poss == 'away'){
 			if(currYardLine<20){
@@ -247,13 +254,11 @@ $(document).ready(function(){
 				currYardLine = 20;
 			}
 			firstDownMarker = currYardLine + 10;
-			currDown = 1;
-			yardsToGo = 10;
+			firstDown();
 			$('.button').attr('poss', 'home');
 		}
 		$('#down').text(currDown);
 		$('#yards-to-go').text(yardsToGo);
-		$('#special-teams').hide();
 		clearField();
 	})
 	$('#punt').click(function(){
@@ -265,8 +270,7 @@ $(document).ready(function(){
 			distance = Math.floor(Math.random()*20)+35;
 		}else{
 			distance = Math.floor(Math.random()*15)+55;
-		}
-		
+		}		
 		var poss = checkPoss();
 		drawPunt(distance,poss);
 		setTimeout(clearField,2000);
@@ -276,8 +280,7 @@ $(document).ready(function(){
 				currYardLine = 80;
 			}
 			firstDownMarker = currYardLine - 10;
-			currDown = 1;
-			yardsToGo = 10;
+			firstDown();
 			$('.button').attr('poss', 'away');
 		}else if(poss == 'away'){
 			currYardLine-=distance;
@@ -285,20 +288,10 @@ $(document).ready(function(){
 				currYardLine = 20;
 			}
 			firstDownMarker = currYardLine + 10;
-			currDown = 1;
-			yardsToGo = 10;
+			firstDown();
 			$('.button').attr('poss', 'home');
 		}
 		$('#down').text(currDown);
 		$('#yards-to-go').text(yardsToGo);
-		$('#special-teams').hide();
 	})
 });
-
-
-
-
-
-
-
-
