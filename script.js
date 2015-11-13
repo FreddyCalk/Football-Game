@@ -257,7 +257,16 @@ $(document).ready(function(){
 		clearField();
 	})
 	$('#punt').click(function(){
-		var distance = Math.floor(Math.random()*20)+40;
+		var goodKick = Math.random();
+		var distance = 0;
+		if(goodKick<=0.05){
+			distance = Math.floor(Math.random()*15)+20;
+		}else if(goodKick<=0.9){
+			distance = Math.floor(Math.random()*20)+35;
+		}else{
+			distance = Math.floor(Math.random()*15)+55;
+		}
+		
 		var poss = checkPoss();
 		drawPunt(distance,poss);
 		setTimeout(clearField,2000);
