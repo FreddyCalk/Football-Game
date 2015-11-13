@@ -1,4 +1,4 @@
-	
+
 $(document).ready(function(){
 	var currYardLine = 20;
 	// var bigRunnerEnergy = 100;
@@ -11,48 +11,65 @@ $(document).ready(function(){
 	var firstDownMarker = currYardLine + 10;
 	var yardsToGo = 10;
 
-	function drawRun(yards){
+	function drawRun(yards,poss){
 		var canvas = $('#field')[0];
 		var context = canvas.getContext('2d');
-		var currStartYardLine = (currYardLine*6)+88;
-		var newStartYardLine = (6*yards) + currStartYardLine;
-		context.beginPath();
+		var currStartYardLine = 0;	
+		var newStartYardLine = 0;
 		context.lineWidth = 10;
-		context.moveTo(currStartYardLine,200);
-		context.lineTo((6*yards)+currStartYardLine,200);
+		if(poss == 'home'){
+			currStartYardLine = (currYardLine*6)+88;
+			newStartYardLine = (6*yards) + currStartYardLine;
+			context.moveTo(currStartYardLine,200);
+			context.lineTo((6*yards)+currStartYardLine,200);
+		}else if(poss == 'away'){
+			currStartYardLine = (6*currYardLine)+88;
+			newStartYardLine = (-6*yards) + currStartYardLine;
+			context.moveTo(currStartYardLine,200);
+			context.lineTo((-6*yards)+currStartYardLine,200);
+		}
 		context.stroke();
 	}
-	function drawPass(yards){
+	function drawPass(yards,poss){
 		var canvas = $('#field')[0];
 		var context = canvas.getContext('2d');
-		var currStartYardLine = (currYardLine*6)+88;
-		var newStartYardLine = (6*yards) + currStartYardLine;
+		var currStartYardLine = 0;
+		var newStartYardLine = 0;
 		context.beginPath();
 		context.lineWidth = 10;
-		context.moveTo(currStartYardLine,200);
-		context.bezierCurveTo(currStartYardLine,180,currStartYardLine+(6*yards),180,currStartYardLine+(6*yards),200);
+		if(poss == 'home'){
+			currStartYardLine = (currYardLine*6)+88;
+			newStartYardLine = (6*yards) + currStartYardLine;	
+			context.moveTo(currStartYardLine,200);
+			context.bezierCurveTo(currStartYardLine,180,currStartYardLine+(6*yards),180,currStartYardLine+(6*yards),200);
+		}else if(poss == 'away'){
+			currStartYardLine = currYardLine*6+88;
+			newStartYardLine = (-6*yards) +currStartYardLine;
+			context.moveTo(currStartYardLine,200);
+			context.bezierCurveTo(currStartYardLine,180,currStartYardLine-(6*yards),180,currStartYardLine-(6*yards),200);
+		
+		}
 		context.stroke();
 	};
-	function drawAwayPass(yards){
+	function drawPunt(yards,poss){
 		var canvas = $('#field')[0];
 		var context = canvas.getContext('2d');
-		var currStartYardLine = currYardLine*6+88;
-		var newStartYardLine = (-6*yards) +currStartYardLine;
+		var currStartYardLine = 0;
+		var newStartYardLine = 0;
 		context.beginPath();
 		context.lineWidth = 10;
-		context.moveTo(currStartYardLine,200);
-		context.bezierCurveTo(currStartYardLine,180,currStartYardLine-(6*yards),180,currStartYardLine-(6*yards),200);
-		context.stroke();
-	}
-	function drawAwayRun(yards){
-		var canvas = $('#field')[0];
-		var context = canvas.getContext('2d');
-		var currStartYardLine = (6*currYardLine)+88;
-		var newStartYardLine = (-6*yards) + currStartYardLine;
-		context.beginPath();
-		context.lineWidth = 10;
-		context.moveTo(currStartYardLine,200);
-		context.lineTo((-6*yards)+currStartYardLine,200);
+		console.log(currYardLine)
+		if(poss == 'home'){
+			currStartYardLine = (currYardLine*6)+88;
+			newStartYardLine = (6*yards) + currStartYardLine;	
+			context.moveTo(currStartYardLine,200);
+			context.bezierCurveTo(currStartYardLine,75,currStartYardLine+(6*yards),75,currStartYardLine+(6*yards),200);
+		}else if(poss == 'away'){
+			currStartYardLine = currYardLine*6+88;
+			newStartYardLine = (-6*yards) +currStartYardLine;
+			context.moveTo(currStartYardLine,200);
+			context.bezierCurveTo(currStartYardLine,75,currStartYardLine-(6*yards),75,currStartYardLine-(6*yards),200);
+		}
 		context.stroke();
 	}
 	function clearField(){
@@ -146,11 +163,10 @@ $(document).ready(function(){
 	}
 
 	function updateRunYardage(yards,poss){
+		drawRun(yards,poss);
 		if(poss == 'home'){
-			drawRun(yards);
-			currYardLine += yards;
-		}else if(poss == 'away'){
-			drawAwayRun(yards);
+		currYardLine += yards;
+		}else if(poss== 'away'){
 			currYardLine -= yards;
 		}
 		updateDown(yards,poss)
@@ -158,11 +174,10 @@ $(document).ready(function(){
 		
 	}
 	function updatePassYardage(yards,poss){
+		drawPass(yards,poss);
 		if(poss == 'home'){
-			drawPass(yards);
 			currYardLine += yards;
-		}else if(poss == 'away'){
-			drawAwayPass(yards);
+		}else if(poss = 'away'){
 			currYardLine -= yards;
 		}
 		updateDown(yards,poss)
@@ -183,6 +198,8 @@ $(document).ready(function(){
 		var yards = 1;
 		var poss = checkPoss();
 		updateRunYardage(yards,poss);
+		console.log(currYardLine)
+		console.log(poss)
 	});
 	$('#big-receiver').click(function(){
 		var yards = 25;
@@ -220,13 +237,13 @@ $(document).ready(function(){
 			$('.button').attr('poss', 'away');
 		}else if(poss == 'away'){
 			if(currYardLine<20){
-				$('#home-score').text(Number($('#home-score').text())+3);
+				$('#away-score').text(Number($('#away-score').text())+3);
 				currYardLine = 20;
 			}else if((currYardLine<30)&&(chances<0.90)){
-				$('#home-score').text(Number($('#home-score').text())+3);
+				$('#away-score').text(Number($('#away-score').text())+3);
 				currYardLine = 20;
 			}else if((currYardLine<40)&&(chances<0.6)){
-				$('#home-score').text(Number($('#home-score').text())+3);
+				$('#away-score').text(Number($('#away-score').text())+3);
 				currYardLine = 20;
 			}
 			firstDownMarker = currYardLine + 10;
@@ -236,35 +253,36 @@ $(document).ready(function(){
 		}
 		$('#down').text(currDown);
 		$('#yards-to-go').text(yardsToGo);
+		$('#special-teams').hide();
 		clearField();
 	})
 	$('#punt').click(function(){
 		var distance = Math.floor(Math.random()*20)+40;
 		var poss = checkPoss();
+		drawPunt(distance,poss);
+		setTimeout(clearField,2000);
 		if(poss == 'home'){
 			currYardLine+=distance;
 			if(currYardLine>=100){
 				currYardLine = 80;
 			}
-		firstDownMarker = currYardLine - 10;
-		currDown = 1;
-		yardsToGo = 10;
-		clearField();
-		$('.button').attr('poss', 'away');
+			firstDownMarker = currYardLine - 10;
+			currDown = 1;
+			yardsToGo = 10;
+			$('.button').attr('poss', 'away');
 		}else if(poss == 'away'){
 			currYardLine-=distance;
 			if(currYardLine<=0){
 				currYardLine = 20;
 			}
-		firstDownMarker = currYardLine + 10;
-		currDown = 1;
-		yardsToGo = 10;
-		clearField();
-		$('.button').attr('poss', 'home');
+			firstDownMarker = currYardLine + 10;
+			currDown = 1;
+			yardsToGo = 10;
+			$('.button').attr('poss', 'home');
 		}
 		$('#down').text(currDown);
 		$('#yards-to-go').text(yardsToGo);
-		console.log(distance)
+		$('#special-teams').hide();
 	})
 });
 
