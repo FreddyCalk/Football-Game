@@ -35,7 +35,9 @@
 }
 #yard-line{
 	top:90px;
-	left:360px;
+	left:305px;
+	border: 3px solid grey;
+	padding:0px 50px;
 }
 .arrow-left{
 	position:absolute;

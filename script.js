@@ -90,6 +90,9 @@ $(document).ready(function(){
 	function checkTouchdown(position){
 		if(position>=100){
 			$('#home-score').text(Number($('#home-score').text())+7);
+			if($('#home-score').text() < 10){
+				$('#home-score').text("0"+$('#home-score').text());
+			}
 			alert('TOUCHDOWN!!!')
 			currYardLine = 80;
 			firstDownMarker = currYardLine - 10;
@@ -101,6 +104,9 @@ $(document).ready(function(){
 			$('.button').attr('poss', 'away')
 		}else if(position<=0){
 			$('#away-score').text(Number($('#away-score').text())+7);
+			if($('#away-score').text() < 10){
+				$('#away-score').text("0"+$('#away-score').text());
+			}
 			alert('The Visitor has Scored');
 			currYardLine = 20;
 			firstDownMarker = currYardLine + 10;
@@ -244,6 +250,9 @@ $(document).ready(function(){
 		}else if(currYardLine < 50){
 			$('.arrow-right').hide();
 			$('.arrow-left').show();
+		}
+		if(yardLine < 10){
+			yardLine = "0" + yardLine;
 		}
 			
 			$('#yard-line').text(yardLine);
