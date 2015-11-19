@@ -128,6 +128,7 @@ $(document).ready(function(){
 				$('#special-teams').show();
 			}else if(currDown == 4){
 				$('.button').attr('poss','away');
+				alert('Turnover on Downs');
 				firstDown()
 				clearField();
 				restoreEnergyPossessionChange();
@@ -149,7 +150,8 @@ $(document).ready(function(){
 				$('#special-teams').show();
 			}else if(currDown == 4){
 				$('.button').attr('poss','home');
-				firstDown()
+				alert('Turnover on Downs');
+				firstDown();
 				clearField();
 				restoreEnergyPossessionChange();
 			}
@@ -165,6 +167,8 @@ $(document).ready(function(){
 		currDown = 1;
 		yardsToGo = 10;
 		$('#special-teams').hide();
+		$('#down').text(currDown);
+		$('#yards-to-go').text(yardsToGo);
 	}
 	function lateralLocation(){
 		console.log(latLoc)
@@ -181,27 +185,64 @@ $(document).ready(function(){
 			latLoc += 10;
 		}
 	}
-	function updateRunYardage(yards,poss){
+	function updateRunYardage(yards,poss,chanceOfTurnover){
 		lateralLocation()
 		drawRun(truncatePlay(yards,poss),poss);
+		var turnover = false;
 		if(poss == 'home'){
 		currYardLine += yards;
 		}else if(poss== 'away'){
 			currYardLine -= yards;
 		}
-		updateDown(yards,poss)
-		checkTouchdown(currYardLine);		
+		turnover = checkTurnover(yards,poss,chanceOfTurnover);
+		if(!turnover){
+			updateDown(yards,poss)
+			checkTouchdown(currYardLine);
+		}		
 	}
-	function updatePassYardage(yards,poss){
+	function updatePassYardage(yards,poss,chanceOfTurnover){
 		lateralLocation()
 		drawPass(truncatePlay(yards,poss),poss);
-		if(poss == 'home'){
+		var turnover = false;
+		if(poss === 'home'){
 			currYardLine += yards;
-		}else if(poss = 'away'){
+		}else if(poss === 'away'){
 			currYardLine -= yards;
 		}
-		updateDown(yards,poss)
-		checkTouchdown(currYardLine);		
+		turnover = checkTurnover();
+		if(!turnover){
+			updateDown(yards,poss)
+			checkTouchdown(currYardLine);
+		}		
+	}
+	function checkTurnover(yards,poss,chanceOfTurnover){
+		if((poss === 'home')&&(chanceOfTurnover <= 0.05)&&(yards !== 0)){
+			$('.button').attr('poss','away')
+			if(currYardLine >= 100){
+				currYardLine = 80;
+			}
+			turnover = true;
+			firstDown();
+			alert('Turnover!');
+			clearField()
+			restoreEnergyPossessionChange();
+			return true;
+			
+
+		}else if((poss === 'away')&&(chanceOfTurnover <= 0.05)&&(yards !== 0)){
+			$('.button').attr('poss','away')
+			if(currYardLine <= 0 ){
+				currYardLine = 20;
+			}
+			turnover = true;
+			firstDown();
+			alert('Turnover!');
+			clearField();
+			restoreEnergyPossessionChange();
+			return true;
+			
+
+		}
 	}
 	function truncatePlay(yards,poss){
 		var potentialYards = 0;
@@ -229,74 +270,77 @@ $(document).ready(function(){
 		var yards = 0;
 		var poss = checkPoss();
 		var chanceOfGain = Math.random()*bigRunnerEnergy;
+		var chanceOfFumble = Math.random();
 		if(chanceOfGain > 0.05){
 			yards += rollDice(2,4);
-			bigRunnerEnergy *= 0.95;
+			bigRunnerEnergy *= 0.9;
 			if(chanceOfGain >0.95){
 				yards += rollDice(8,8);
-				bigRunnerEnergy *= 0.8;
+				bigRunnerEnergy *= 0.6;
 			}else if(chanceOfGain > 0.9){
 				yards += rollDice(5,5);
-				bigRunnerEnergy *= 0.9;
+				bigRunnerEnergy *= 0.8;
 			}
 		}else if(chanceOfGain < 0.015){
 			yards -= rollDice(2,5);
-			bigRunnerEnergy *= 0.95
+			bigRunnerEnergy *= 0.9
 		}else{
 			yards -= rollDice(1,5);
-			bigRunnerEnergy *= 0.98;
+			bigRunnerEnergy *= 0.95;
 		}
 		$('#big-back-energy').text(Math.round(bigRunnerEnergy*100)+"%");
 		console.log(bigRunnerEnergy)
-		updateRunYardage(yards,poss);
+		updateRunYardage(yards,poss,chanceOfFumble);
 	});
 	$('#med-back').click(function(){
 		var yards = 0;
 		var poss = checkPoss();
 		var chanceOfGain = Math.random()*medRunnerEnergy;
+		var chanceOfFumble = Math.random();
 		if(chanceOfGain > 0.10){
 			yards += rollDice(2,3);
-			medRunnerEnergy *= 0.95;
+			medRunnerEnergy *= 0.9;
 			if(chanceOfGain >0.97){
 				yards += rollDice(7,7);
-				medRunnerEnergy *= 0.8;
+				medRunnerEnergy *= 0.6;
 			}else if(chanceOfGain > 0.92){
 				yards += rollDice(4,4);
-				medRunnerEnergy *= 0.9;
+				medRunnerEnergy *= 0.8;
 			}
 		}else if(chanceOfGain < 0.05){
 			yards -= rollDice(3,4);
-			medRunnerEnergy *= 0.95;
+			medRunnerEnergy *= 0.9;
 		}else{
 			yards -= rollDice(2,4);
-			medRunnerEnergy *= 0.98;
+			medRunnerEnergy *= 0.95;
 		}
 		$('#med-back-energy').text(Math.round(medRunnerEnergy*100)+"%");
-		updateRunYardage(yards,poss);
+		updateRunYardage(yards,poss,chanceOfFumble);
 	});
 	$('#small-back').click(function(){
 		var yards = 0;
 		var poss = checkPoss();
 		var chanceOfGain = Math.random()*smallRunnerEnergy;
+		var chanceOfFumble = Math.random();
 		if(chanceOfGain > 0.15){
 			yards += rollDice(2,4);
-			smallRunnerEnergy *= 0.95;
+			smallRunnerEnergy *= 0.9;
 			if(chanceOfGain >0.95){
 				yards += rollDice(8,8);
-				smallRunnerEnergy *= 0.8;
+				smallRunnerEnergy *= 0.6;
 			}else if(chanceOfGain > 0.9){
 				yards += rollDice(5,5);
-				smallRunnerEnergy *= 0.9;
+				smallRunnerEnergy *= 0.8;
 			}
 		}else if(chanceOfGain < 0.08){
 			yards -= rollDice(4,4);
-			smallRunnerEnergy *= 0.95;
+			smallRunnerEnergy *= 0.9;
 		}else{
 			yards -= rollDice(3,3);
-			smallRunnerEnergy *= 0.98;
+			smallRunnerEnergy *= 0.95;
 		}
 		$('#small-back-energy').text(Math.round(smallRunnerEnergy*100)+"%");
-		updateRunYardage(yards,poss);
+		updateRunYardage(yards,poss,chanceOfFumble);
 	});
 	$('#big-receiver').click(function(){
 		var yards = 0;
@@ -315,7 +359,7 @@ $(document).ready(function(){
 			}
 		}
 		$('#big-receiver-energy').text(Math.round(bigReceiverEnergy*100)+"%");
-		updatePassYardage(yards,poss)
+		updatePassYardage(yards,poss,chanceOfInterception)
 	});
 	$('#med-receiver').click(function(){
 		var yards = 0;
@@ -334,7 +378,7 @@ $(document).ready(function(){
 			}
 		}
 		$('#med-receiver-energy').text(Math.round(medReceiverEnergy*100)+"%");
-		updatePassYardage(yards,poss)
+		updatePassYardage(yards,poss,chanceOfInterception)
 	});
 	$('#small-receiver').click(function(){
 		var yards = 0;
@@ -355,15 +399,8 @@ $(document).ready(function(){
 			yards -= rollDice(1,5)
 			smallReceiverEnergy *= 0.95;
 		}
-		// if((chanceOfInterception < 0.05)&&(poss == 'home')){
-		// 	$('.button').attr('poss','away');
-		// 	firstDown();
-		// }else if((chanceOfInterception < 0.05)&&(poss == 'away')){
-		// 	$('.button').attr('poss','home');
-		// 	firstDown()
-		// }
 		$('#small-receiver-energy').text(Math.round(smallReceiverEnergy*100)+"%");
-		updatePassYardage(yards,poss)
+		updatePassYardage(yards,poss,chanceOfInterception)
 	});
 	$('#field-goal').click(function(){
 		var chances = Math.random()
@@ -379,6 +416,8 @@ $(document).ready(function(){
 			}else if((currYardLine>60)&&(chances>0.4)){
 				$('#home-score').text(Number($('#home-score').text())+3);
 				currYardLine = 80;
+			}else{
+				alert("No Good!")
 			}
 			firstDownMarker = currYardLine - 10;
 			firstDown();
@@ -393,13 +432,13 @@ $(document).ready(function(){
 			}else if((currYardLine<40)&&(chances>0.4)){
 				$('#away-score').text(Number($('#away-score').text())+3);
 				currYardLine = 20;
+			}else{
+				alert("No Good!")
 			}
 			firstDownMarker = currYardLine + 10;
 			firstDown();
 			$('.button').attr('poss', 'home');
 		}
-		$('#down').text(currDown);
-		$('#yards-to-go').text(yardsToGo);
 		restoreEnergyPossessionChange();
 		clearField();
 	})
@@ -433,8 +472,6 @@ $(document).ready(function(){
 			firstDown();
 			$('.button').attr('poss', 'home');
 		}
-		$('#down').text(currDown);
-		$('#yards-to-go').text(yardsToGo);
 		restoreEnergyPossessionChange();
 	})
 	function restoreEnergyPossessionChange(){
