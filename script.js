@@ -220,7 +220,7 @@ $(document).ready(function(){
 			restoreEnergyPossessionChange();
 			return true;
 		}else if((poss === 'away')&&(chanceOfTurnover <= 0.05)&&(yards !== 0)){
-			$('.button').attr('poss','away')
+			$('.button').attr('poss','home')
 			if(currYardLine <= 0 ){
 				currYardLine = 20;
 			}
@@ -234,14 +234,19 @@ $(document).ready(function(){
 	}
 	function setYardLine(){
 		var yardLine = currYardLine;
-		if(currYardLine>50){
+		if(currYardLine > 50){
+			$('.arrow-right').show();
+			$('.arrow-left').hide();
 			yardLine = 50 - (currYardLine - 50);
-			// $('.arrow-right').show();
-			// $('.arrow-left').hide();
+		}else if(currYardLine === 50){
+			$('.arrow-right').hide();
+			$('.arrow-left').hide();
+		}else if(currYardLine < 50){
+			$('.arrow-right').hide();
+			$('.arrow-left').show();
 		}
-			// $('.arrow-right').hide();
-			// $('.arrow-left').show();
-		$('#yard-line').text(yardLine);
+			
+			$('#yard-line').text(yardLine);
 	}
 	function truncatePlay(yards,poss){
 		var potentialYards = 0;

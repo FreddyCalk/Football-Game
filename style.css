@@ -12,10 +12,10 @@
 #ball-on{
 	position: absolute;
 	font-family: sans-serif;
-	font-size: 70px;
+	font-size: 55px;
 	color:white;
-	top:10px;
-	left:290px;
+	top:20px;
+	left:285px;
 }
 #home-score{
 	top:90px;
