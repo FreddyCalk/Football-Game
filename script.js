@@ -6,6 +6,8 @@ $(document).ready(function(){
 	var bigReceiverEnergy = 1;
 	var medReceiverEnergy = 1;
 	var smallReceiverEnergy = 1;
+	var awayAppended = false;
+	var homeAppended = true;
 	$('#big-back-energy').text(bigRunnerEnergy*100+"%");
 	$('#med-back-energy').text(medRunnerEnergy*100+"%");
 	$('#small-back-energy').text(smallRunnerEnergy*100+"%");
@@ -90,8 +92,9 @@ $(document).ready(function(){
 	function checkTouchdown(position){
 		if(position>=100){
 			$('#home-score').text(Number($('#home-score').text())+7);
-			if($('#home-score').text() < 10){
+			if(($('#home-score').text() < 10)&&(!homeAppended)){
 				$('#home-score').text("0"+$('#home-score').text());
+				homeAppended = true;
 			}
 			alert('TOUCHDOWN!!!')
 			currYardLine = 80;
@@ -104,8 +107,9 @@ $(document).ready(function(){
 			$('.button').attr('poss', 'away')
 		}else if(position<=0){
 			$('#away-score').text(Number($('#away-score').text())+7);
-			if($('#away-score').text() < 10){
+			if(($('#away-score').text() < 10)&&(!awayAppended)){
 				$('#away-score').text("0"+$('#away-score').text());
+				awayAppended = true;
 			}
 			alert('The Visitor has Scored');
 			currYardLine = 20;
@@ -441,6 +445,10 @@ $(document).ready(function(){
 			firstDownMarker = currYardLine - 10;
 			firstDown();
 			$('.button').attr('poss', 'away');
+			if(($('#home-score').text() < 10)&&(!homeAppended)){
+				$('#home-score').text("0"+Number($('#home-score').text()));
+				homeAppended = true;
+			}
 		}else if(poss == 'away'){
 			if(currYardLine<20){
 				$('#away-score').text(Number($('#away-score').text())+3);
@@ -457,7 +465,13 @@ $(document).ready(function(){
 			firstDownMarker = currYardLine + 10;
 			firstDown();
 			$('.button').attr('poss', 'home');
+			if(($('#away-score').text() < 10)&&(!awayAppended)){
+				$('#away-score').text("0"+Number($('#away-score').text()));
+				awayAppended = false;
+			}
 		}
+		
+		
 		setYardLine();
 		restoreEnergyPossessionChange();
 		clearField();
