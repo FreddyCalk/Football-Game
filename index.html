@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="footballApp">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,9 +7,12 @@
 	<link href='https://fonts.googleapis.com/css?family=Black+Ops+One' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="style.css">
 	<script src="jquery.min.js"></script>
+	<script src='angular.min.js'></script>
 	<script src="script.js"></script>
+	<script src='Team-Objects.js'></script>
+	<script src='controller.js'></script>
 </head>
-<body>
+<body ng-controller="footballController">
 	<div id="scoreboard">
 		<img class = "scoreboard" src="media/scoreboard.png">
 		<div id="home-score">00</div>
