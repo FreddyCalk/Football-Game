@@ -8,24 +8,23 @@
 	<link rel="stylesheet" href="style.css">
 	<script src="jquery.min.js"></script>
 	<script src='angular.min.js'></script>
-	<script src="script.js"></script>
-	<script src='Team-Objects.js'></script>
+	<!-- // <script src="script.js"></script> -->
 	<script src='controller.js'></script>
 </head>
 <body ng-controller="footballController">
 	<div id="scoreboard">
 		<img class = "scoreboard" src="media/scoreboard.png">
-		<div id="home-score">00</div>
-		<div id="away-score">00</div>
+		<div id="home-score">{{homeScore}}</div>
+		<div id="away-score">{{awayScore}}</div>
 		<div id="ball-on">BALL ON</div>
-		<div id="yard-line"></div>
+		<div id="yard-line">{{yardLine}}</div>
 		<div id="home-arrow"  class="arrow-left"></div>
 		<div id="away-arrow"  class="arrow-right"></div>
-		<div id="down">1</div>
-		<div id="yards-to-go">10</div>
+		<div id="down">{{down}}</div>
+		<div id="yards-to-go">{{yardsToGo}}</div>
 	</div>
 	<canvas id="field" width='800px' height='377px'></canvas>
-	<div id="run-plays">
+	<!-- <div id="run-plays">
 	Run:
 		<button poss="home" class="button" id="big-back">Jovon Robinson <span id="big-back-energy"></span></button>
 		<button class="button" id="med-back">Peyton Barber <span id="med-back-energy"></span></button>
@@ -36,6 +35,11 @@
 		<button class="button" id="big-receiver">Duke Williams <span id="big-receiver-energy"></span></button>
 		<button class="button" id="med-receiver">Ricardo Louis <span id="med-receiver-energy"></span></button>
 		<button class="button" id="small-receiver">Jason Smith <span id="small-receiver-energy"></span></button>
+	</div> -->
+	<div id='button-container'>
+		<div class='btn' ng-repeat="player in team">
+			<button class="button" ng-click="makePlay()" id="{{player.id}}">{{player.name}} <span id="energy">{{player.energy}}%</span></button>
+		</div>
 	</div>
 	<div id='special-teams' style="display: none">
 	Special Teams:
