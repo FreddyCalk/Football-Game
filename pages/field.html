@@ -1,0 +1,22 @@
+		<div id="scoreboard">
+			<img class = "scoreboard" src="media/scoreboard.png">
+			<div id="home-score">{{homeScore}}</div>
+			<div id="away-score">{{awayScore}}</div>
+			<div id="ball-on">BALL ON</div>
+			<div id="yard-line">{{yardLine}}</div>
+			<div id="home-arrow"  class="arrow-left"></div>
+			<div id="away-arrow"  class="arrow-right"></div>
+			<div id="down">{{down}}</div>
+			<div id="yards-to-go">{{yardsToGo}}</div>
+		</div>
+		<canvas id="field" width='800px' height='377px'></canvas>
+		<div id='button-container'>
+			<div class='btn' ng-repeat="player in team">
+				<button class="button" ng-click="makePlay()" id="{{player.id}}">{{player.name}} <span id="energy">{{player.energy}}%</span></button>
+			</div>
+		</div>
+		<div id='special-teams' style="display: none">
+		Special Teams:
+			<button class="button" id="punt" ng-click="punt()">Punt</button>
+			<button class="button" id="field-goal" ng-click="fieldGoal()">Field Goal</button>
+		</div>

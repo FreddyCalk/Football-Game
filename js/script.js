@@ -210,14 +210,14 @@ $(document).ready(function(){
 		}else if(poss== 'away'){
 			currYardLine -= yards;
 		}
-		turnover = checkTurnover(yards,poss,chanceOfTurnover);
+		turnover = checkTurnover(yards,poss,chanceOfTurnover,playType);
 		if(!turnover){
 			updateDown(yards,poss)
 			checkTouchdown(currYardLine);
 		}
 		setYardLine();		
 	}
-	function checkTurnover(yards,poss,chanceOfTurnover){
+	function checkTurnover(yards,poss,chanceOfTurnover,playType){
 		if((poss === 'home')&&(chanceOfTurnover <= 0.05)&&(yards !== 0)){
 			$('.button').attr('poss','away')
 			if(currYardLine >= 100){
@@ -225,7 +225,11 @@ $(document).ready(function(){
 			}
 			turnover = true;
 			firstDown();
-			alert('Turnover!');
+			if(playType == 'run'){
+				alert('Fumble!')
+			}else if(playType == 'pass'){
+				alert('Interception!')
+			}
 			clearField()
 			restoreEnergyPossessionChange();
 			return true;
@@ -236,6 +240,11 @@ $(document).ready(function(){
 			}
 			turnover = true;
 			firstDown();
+			if(playType == 'run'){
+				alert('Fumble!')
+			}else if(playType == 'pass'){
+				alert('Interception!')
+			}
 			alert('Turnover!');
 			clearField();
 			restoreEnergyPossessionChange();
@@ -259,7 +268,7 @@ $(document).ready(function(){
 			yardLine = "0" + yardLine;
 		}
 			
-			$('#yard-line').text(yardLine);
+		$('#yard-line').text(yardLine);
 	}
 	function truncatePlay(yards,poss){
 		var potentialYards = 0;

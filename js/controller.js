@@ -1,8 +1,12 @@
 var currYardLine = 20;
+var currDown = 1;
+var yardsToGo = 10;
+var firstDownMarker = currYardLine + yardsToGo;
 var latLoc = 190;
 var moveRight = false;
 var homeAppended = false;
 var awayAppended = false;
+var startingTeam;
 
 
 function Player (name, position, speed, strength, team, id, playType){
@@ -35,35 +39,87 @@ Team2.push(new Player('Justin Scott-Wesley','receiver',80,90,'away','med-receive
 Team2.push(new Player('Terry Godwin','receiver',90,80,'away','small-receiver','pass'));
 
 
-angular.module('footballApp',[]).controller('footballController',function ($scope){
+var footballApp = angular.module('footballApp',['ngRoute']);
+footballApp.config(function ($routeProvider){
+	$routeProvider.when('/',{
+		templateUrl: 'pages/coinflip.html',
+		controller: 'coinFlipController'
+	}).
+	when('/:firstParam',{
+		templateUrl: 'pages/field.html',
+		controller: 'footballController'
+	}).
+	otherwise({
+		redirectTo: '/'
+	});
+});
 
-		$scope.team = Team1
+footballApp.controller('coinFlipController',function ($scope, $routeParams){
+
+	$scope.coinFlip = function (choice){
+		var num = Math.floor(Math.random()*6)+10;
+		var coin = '';
+		if(num % 2){
+			coin = 'tails'
+		}else{
+			coin = 'heads'
+		}
+		console.log(num,coin,choice)
+		if(choice == coin){
+			startingTeam = Team2;
+			currYardLine = 80;
+			firstDownMarker = currYardLine - yardsToGo;
+		}else{
+			startingTeam = Team1;
+		}
+
+		$('#coin').css('transition', 'all '+num*0.2+'s');
+
+		setTimeout(function(){
+			$('#coin').css('transform', 'rotateY('+180*num+'deg)');
+
+		},0)
+
+		setTimeout(function(){
+			window.location.href = '#/field';
+		},(1+num*0.2)*1000)
+
+	}
+});
+footballApp.controller('footballController', function ($scope){
+
+		$scope.team = startingTeam;
 		$scope.homeScore = '00';
 		$scope.awayScore = '00';
+		$scope.down = currDown;
+		$scope.yardsToGo = yardsToGo;
+		setYardLine();
 	
 	$scope.makePlay = function(){	
 		var who = $(this)[0].player.id;
 		var poss = $(this)[0].player.team;
 		var type = $(this)[0].player.playType;
+		var speed = $(this)[0].player.speed;
+		var strength = $(this)[0].player.strength;
 		var yards = 0;
 		switch(who){
 			case 'big-back':
-				yards = bigBack(poss);
+				yards = bigBack(speed,strength);
 				break;
 			case 'med-back':
-				yards = medBack(poss);
+				yards = medBack(speed,strength);
 				break;
 			case 'small-back':
-				yards = smallBack(poss);
+				yards = smallBack(speed,strength);
 				break;
 			case 'big-receiver':
-				yards = bigReceiver(poss);
+				yards = bigReceiver(speed,strength);
 				break;
 			case 'med-receiver':
-				yards = medReceiver(poss);
+				yards = medReceiver(speed,strength);
 				break;
 			case 'small-receiver':
-				yards = smallReceiver(poss);
+				yards = smallReceiver(speed,strength);
 				break;
 		}
 		
@@ -78,20 +134,24 @@ angular.module('footballApp',[]).controller('footballController',function ($scop
 			currYardLine -= yards;
 		}
 		lateralLocation();
-		checkTouchdown(currYardLine)
+		updateDown(yards,poss);
+		checkTouchdown(currYardLine);
+		setYardLine();
 			
 	}
 	function checkTouchdown(position){
 		if(position >= 100){
 			$scope.homeScore = Number($scope.homeScore) + 7;
 			if(($scope.homeScore < 10)&&(!homeAppended)){
-				$scope.homeScore = '0'+$scope.homeScore;
+				$scope.homeScore = '0' + $scope.homeScore;
 				homeAppended = true;
 			}
 			alert('Touchdown!');
 			currYardLine = 80;
 			$scope.team = Team2;
-			clearField()
+			firstDownMarker = currYardLine - 10;
+			clearField();
+			firstDown();
 		}else if(position <= 0){
 			alert('away team scored');
 			$scope.awayScore = Number($scope.awayScore) + 7;
@@ -101,8 +161,17 @@ angular.module('footballApp',[]).controller('footballController',function ($scop
 			}
 			currYardLine = 20;
 			$scope.team = Team1;
-			clearField()
+			firstDownMarker = currYardLine + 10;
+			clearField();
+			firstDown();
 		}
+	}
+	function firstDown(){
+		currDown = 1;
+		yardsToGo = 10;
+		$('#special-teams').hide();
+		$scope.down = 1;
+		$scope.yardsToGo = 10;
 	}
 	function drawRun(yards,poss){
 		var canvas = $('#field')[0];
@@ -146,11 +215,79 @@ angular.module('footballApp',[]).controller('footballController',function ($scop
 		context.stroke();
 	};
 
+	function updateDown(yards,poss){
+		if(poss == 'home'){
+			if(currYardLine>=firstDownMarker){
+				firstDown()
+				firstDownMarker = currYardLine + yardsToGo;
+			}
+			else if(currDown == 1){
+				currDown = 2;
+				yardsToGo = yardsToGo - yards;
+			}else if(currDown == 2){
+				currDown = 3;
+				yardsToGo = yardsToGo - yards;
+			}else if(currDown == 3){
+				currDown = 4
+				yardsToGo = yardsToGo - yards;
+				$('#special-teams').show();
+			}else if(currDown == 4){
+				$scope.team = Team2;
+				alert('Turnover on Downs');
+				firstDown()
+				clearField();
+			}
+		}else if(poss == 'away'){
+			if(currYardLine<=firstDownMarker){
+				firstDown()
+				firstDownMarker = currYardLine - yardsToGo;
+				$('#special-teams').hide();
+			}else if(currDown == 1){
+				currDown = 2;
+				yardsToGo = yardsToGo - yards;
+			}else if(currDown == 2){
+				currDown = 3;
+				yardsToGo = yardsToGo - yards;
+			}else if(currDown == 3){
+				currDown = 4;
+				yardsToGo = yardsToGo - yards;
+				$('#special-teams').show();
+			}else if(currDown == 4){
+				$scope.team = Team1;
+				alert('Turnover on Downs');
+				firstDown();
+				clearField();
+			}
+		}
+		$scope.down = currDown;
+		$scope.yardsToGo = yardsToGo;
+	}
+
 	function clearField(){
 		var canvas = $('#field')[0];
 		var context = canvas.getContext('2d');
 		context.clearRect(0,0,1000,1000);
 		latLoc = 190;
+	}
+
+	function setYardLine(){
+		var yardLine = currYardLine;
+		if(currYardLine > 50){
+			$('.arrow-right').show();
+			$('.arrow-left').hide();
+			yardLine = 50 - (currYardLine - 50);
+		}else if(currYardLine === 50){
+			$('.arrow-right').hide();
+			$('.arrow-left').hide();
+		}else if(currYardLine < 50){
+			$('.arrow-right').hide();
+			$('.arrow-left').show();
+		}
+		if(yardLine < 10){
+			yardLine = "0" + yardLine;
+		}
+			
+		$scope.yardLine = yardLine;
 	}
 
 	function lateralLocation(){
@@ -169,27 +306,27 @@ angular.module('footballApp',[]).controller('footballController',function ($scop
 		}
 	}
 
-	function bigBack(poss){
+	function bigBack(speed,strength){
 		yards = 10;
 		return yards;
 	}
-	function medBack(poss){
+	function medBack(speed,strength){
 		yards = 7;
 		return yards;
 	}
-	function smallBack(poss){
+	function smallBack(speed,strength){
 		yards = 3;
 		return yards;
 	}
-	function bigReceiver(poss){
+	function bigReceiver(speed,strength){
 		yards = 10;
 		return yards;
 	}
-	function medReceiver(poss){
+	function medReceiver(speed,strength){
 		yards = 5;
 		return yards;
 	}
-	function smallReceiver(poss){
+	function smallReceiver(speed,strength){
 		yards = 0;
 		return yards;
 	}

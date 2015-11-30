@@ -82,3 +82,25 @@
 	text-align: center;
 	margin: 5px 10px;
 }
+#coin{
+	border-radius: 50%;
+	position:relative;
+	perspective: 50000px;
+	transform-style: preserve-3d;
+  	display: inline;
+}
+#heads, #tails{
+	position:absolute;
+	height: 250px;
+	width: 250px;
+	top:150px;
+	left:200px;
+}
+#heads{
+	backface-visibility: hidden;
+}
+#tails{
+	transform: rotateY(-180deg);
+	backface-visibility: hidden;
+}
+
