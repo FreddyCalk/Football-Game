@@ -9,6 +9,10 @@ var awayAppended = false;
 var startingTeam;
 var Team1;
 var Team2;
+var heads;
+var tails;
+var homeSymbol;
+var awaySymbol;
 
 function Player (name, position, speed, strength, id, playType){
 	this.name = name;
@@ -19,9 +23,11 @@ function Player (name, position, speed, strength, id, playType){
 	this.playType = playType;
 }
 
-function Team (name, players){
+function Team (name, players, logo, symbol){
 	this.name = name;
 	this.players = players;
+	this.logo = logo;
+	this.symbol = symbol;
 }
 Player.prototype.energy = 100;
 var teams = [];
@@ -139,20 +145,20 @@ TennesseePlayers.push(new Player('Josh Smith','receiver',90,90,'big-receiver','p
 TennesseePlayers.push(new Player('Von Pearson','receiver',90,85,'med-receiver','pass'));
 TennesseePlayers.push(new Player('Josh Malone','receiver',80,90,'small-receiver','pass'));
 // Team Array Assembly
-teams.push(new Team('Alabama',AlabamaPlayers));
-teams.push(new Team('Arkansas',ArkansasPlayers));
-teams.push(new Team('Auburn',AuburnPlayers));
-teams.push(new Team('Florida',FloridaPlayers));
-teams.push(new Team('Georgia',GeorgiaPlayers));
-teams.push(new Team('Kentucky',KentuckyPlayers));
-teams.push(new Team('LSU',LSUPlayers));
-teams.push(new Team('Mississippi',OleMissPlayers));
-teams.push(new Team('Mississippi State',MissStatePlayers));
-teams.push(new Team('Mizzou',MizzouPlayers));
-teams.push(new Team('South Carolina',SouthCarolinaPlayers));
-teams.push(new Team('Tennessee',TennesseePlayers));
-teams.push(new Team('Texas A&M',TexasAMPlayers));
-teams.push(new Team('Vanderbilt',VanderbiltPlayers));
+teams.push(new Team('Alabama',AlabamaPlayers,'../media/Alabama\ Logo.jpg','AL'));
+teams.push(new Team('Arkansas',ArkansasPlayers,'../media/arkansasLogo.jpg','AR'));
+teams.push(new Team('Auburn',AuburnPlayers,'../media/Auburn\ Logo.jpg','AU'));
+teams.push(new Team('Florida',FloridaPlayers,'../media/FloridaLogo.jpg','UF'));
+teams.push(new Team('Georgia',GeorgiaPlayers,'../media/Georgia\ Logo.jpg','UGA'));
+teams.push(new Team('Kentucky',KentuckyPlayers,'../media/kentuckyLogo.jpg','UK'));
+teams.push(new Team('LSU',LSUPlayers,'../media/LSULogo.jpg','LSU'));
+teams.push(new Team('Mississippi',OleMissPlayers,'../media/oleMissLogo.png','MISS'));
+teams.push(new Team('Mississippi State',MissStatePlayers,'../media/MissStateLogo.jpg','MSST'));
+teams.push(new Team('Mizzou',MizzouPlayers,'../media/mizzouLogo.jpeg','MZ'));
+teams.push(new Team('South Carolina',SouthCarolinaPlayers,'../media/SouthCarolinaLogo.jpeg','SC'));
+teams.push(new Team('Tennessee',TennesseePlayers,'../media/tennesseeLogo.jpg','UT'));
+teams.push(new Team('Texas A&M',TexasAMPlayers,'../media/TexasAMLogo.png','TAMU'));
+teams.push(new Team('Vanderbilt',VanderbiltPlayers,'../media/vanderbiltLogo.jpeg','VANDY'));
 
 
 
@@ -182,6 +188,10 @@ footballApp.directive('homeClick', function(){
 				Team1 = $scope.team.players;
 				$scope.team.players.team = 'home';
 				console.log($scope.team)
+				console.log(this)
+				$(this).css('background-color','#cacaca')
+				heads = ($scope.team.logo);
+				homeSymbol = $scope.team.symbol
 			})
 		}
 	}
@@ -193,6 +203,10 @@ footballApp.directive('awayClick', function(){
 				Team2 = $scope.team.players
 				$scope.team.players.team = 'away';
 				console.log($scope.team)
+				$(this).css('background-color','#cacaca')
+				tails = $scope.team.logo;
+				console.log($scope.tails)
+				awaySymbol = $scope.team.symbol
 			})
 		}
 	}
@@ -207,7 +221,10 @@ footballApp.controller('setupController', function ($scope){
 })
 
 footballApp.controller('coinFlipController',function ($scope, $routeParams){
-
+	$scope.tails = tails;
+	$scope.heads = heads;
+	$scope.homeSymbol = homeSymbol;
+	$scope.awaySymbol = awaySymbol;
 	$scope.coinFlip = function (choice){
 		var num = Math.floor(Math.random()*6)+10;
 		var coin = '';
