@@ -1,14 +1,13 @@
 
-<div ng-controller="coinFlipController">
+<div id="coin-wrapper" ng-controller="coinFlipController">
+
+	<button class = 'button' type="submit" ng-click="coinFlip('heads')">Heads (AU)</button>
+	<button class = 'button' type="submit" ng-click="coinFlip('tails')">Tails (UGA)</button>
 
 	<div id="coin">	
 		<img id="tails" src="../media/Georgia Logo.jpg">
 		<img id="heads" src="../media/Auburn Logo.jpg">
 	</div>
-
-	<button class = 'button' type="submit" ng-click="coinFlip('heads')">Heads (AU)</button>
-	<button class = 'button' type="submit" ng-click="coinFlip('tails')">Tails (UGA)</button>
-
 	
 </div>
 

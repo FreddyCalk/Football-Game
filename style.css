@@ -1,3 +1,6 @@
+body{
+	position:relative;
+}
 #scoreboard{
 	position: relative;
 }
@@ -80,27 +83,52 @@
 .button{
 	font-size: 20px;
 	text-align: center;
+	padding: 50px;
 	margin: 5px 10px;
+	border-radius: 7px;
+	background-color: black;
+	color:white;
+
+}
+#coin-wrapper{
+	margin-left:5%;
 }
 #coin{
 	border-radius: 50%;
-	position:relative;
-	perspective: 50000px;
+	height:350px;
+	width: 350px;
+	position:absolute;
+	top: 200px;
+	left:9%;
 	transform-style: preserve-3d;
   	display: inline;
 }
 #heads, #tails{
 	position:absolute;
-	height: 250px;
-	width: 250px;
-	top:150px;
-	left:200px;
+	height: 100%;
+	width: 100%;
+
 }
 #heads{
 	backface-visibility: hidden;
 }
 #tails{
 	transform: rotateY(-180deg);
-	backface-visibility: hidden;
+}
+#home-container, #away-container{
+	font-size: 48px;
+	float:left;
+	margin:50px;
+}
+#select-wrapper{
+	overflow:hidden;
+}
+#home-teams, #away-teams{
+	height:350px;
+	width:300px;
+	font-size: 30px;
+	position:relative;
+	margin: 10%;
+	overflow:scroll;
 }
 
