@@ -1,7 +1,8 @@
 
 <div id="select-wrapper" ng-controller="setupController">
 	<div id="home-container">
-		HOME TEAM
+
+		<p>HOME TEAM</p>
 		<div id="home-teams">
 			<div class="home-team" ng-repeat = 'team in teams' home-click>
 				{{team.name}}
@@ -9,7 +10,7 @@
 		</div>
 	</div>
 	<div id="away-container">
-		AWAY TEAM
+		<p>AWAY TEAM</p>
 		<div id="away-teams">
 			<div class="away-team" ng-repeat = "team in teams" away-click>
 				{{team.name}}
@@ -18,5 +19,5 @@
 	</div>
 </div>
 
-<a id="submission" href="#/CoinToss"><button type="submit">Confirm</button></a>
+<a href="#/CoinToss"><button id="submission" type="submit">To the Toss!</button></a>
 

@@ -1,6 +1,8 @@
 
 <div id="coin-wrapper" ng-controller="coinFlipController">
-
+	<div id="message-wrapper">
+		<p id="message">{{teamName}}, make a selection</p>
+	</div>
 	<button class = 'button' type="submit" ng-click="coinFlip('heads')">Heads ({{homeSymbol}})</button>
 	<button class = 'button' type="submit" ng-click="coinFlip('tails')">Tails ({{awaySymbol}})</button>
 

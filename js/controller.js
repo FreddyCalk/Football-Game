@@ -13,6 +13,9 @@ var heads;
 var tails;
 var homeSymbol;
 var awaySymbol;
+var homeScore = '00';
+var awayScore = '00';
+var selectedTeams = [];
 
 function Player (name, position, speed, strength, id, playType){
 	this.name = name;
@@ -145,20 +148,20 @@ TennesseePlayers.push(new Player('Josh Smith','receiver',90,90,'big-receiver','p
 TennesseePlayers.push(new Player('Von Pearson','receiver',90,85,'med-receiver','pass'));
 TennesseePlayers.push(new Player('Josh Malone','receiver',80,90,'small-receiver','pass'));
 // Team Array Assembly
-teams.push(new Team('Alabama',AlabamaPlayers,'../media/Alabama\ Logo.jpg','AL'));
-teams.push(new Team('Arkansas',ArkansasPlayers,'../media/arkansasLogo.jpg','AR'));
-teams.push(new Team('Auburn',AuburnPlayers,'../media/Auburn\ Logo.jpg','AU'));
-teams.push(new Team('Florida',FloridaPlayers,'../media/FloridaLogo.jpg','UF'));
-teams.push(new Team('Georgia',GeorgiaPlayers,'../media/Georgia\ Logo.jpg','UGA'));
-teams.push(new Team('Kentucky',KentuckyPlayers,'../media/kentuckyLogo.jpg','UK'));
-teams.push(new Team('LSU',LSUPlayers,'../media/LSULogo.jpg','LSU'));
-teams.push(new Team('Mississippi',OleMissPlayers,'../media/oleMissLogo.png','MISS'));
-teams.push(new Team('Mississippi State',MissStatePlayers,'../media/MissStateLogo.jpg','MSST'));
-teams.push(new Team('Mizzou',MizzouPlayers,'../media/mizzouLogo.jpeg','MZ'));
-teams.push(new Team('South Carolina',SouthCarolinaPlayers,'../media/SouthCarolinaLogo.jpeg','SC'));
-teams.push(new Team('Tennessee',TennesseePlayers,'../media/tennesseeLogo.jpg','UT'));
-teams.push(new Team('Texas A&M',TexasAMPlayers,'../media/TexasAMLogo.png','TAMU'));
-teams.push(new Team('Vanderbilt',VanderbiltPlayers,'../media/vanderbiltLogo.jpeg','VANDY'));
+teams.push(new Team('Alabama',AlabamaPlayers,'../media/Alabama\ Logo.png','AL'));
+teams.push(new Team('Arkansas',ArkansasPlayers,'../media/arkansasLogo.png','AR'));
+teams.push(new Team('Auburn',AuburnPlayers,'../media/Auburn\ Logo.png','AU'));
+teams.push(new Team('Florida',FloridaPlayers,'../media/FloridaLogo.png','UF'));
+teams.push(new Team('Georgia',GeorgiaPlayers,'../media/Georgia\ Logo.png','UGA'));
+teams.push(new Team('Kentucky',KentuckyPlayers,'../media/kentuckyLogo.png','UK'));
+teams.push(new Team('LSU',LSUPlayers,'../media/LSULogo.png','LSU'));
+teams.push(new Team('Ole Miss',OleMissPlayers,'../media/oleMissLogo.png','MISS'));
+teams.push(new Team('Miss State',MissStatePlayers,'../media/MissStateLogo.png','MSST'));
+teams.push(new Team('Mizzou',MizzouPlayers,'../media/mizzouLogo.png','MZ'));
+teams.push(new Team('S. Car',SouthCarolinaPlayers,'../media/SouthCarolinaLogo.png','SC'));
+teams.push(new Team('Tenn',TennesseePlayers,'../media/tennesseeLogo.png','UT'));
+teams.push(new Team('Tex A&M',TexasAMPlayers,'../media/TexasAMLogo.png','TAMU'));
+teams.push(new Team('Vandy',VanderbiltPlayers,'../media/vanderbiltLogo.png','VANDY'));
 
 
 
@@ -182,31 +185,43 @@ footballApp.config(function ($routeProvider){
 });
 
 footballApp.directive('homeClick', function(){
+	var lastElement;
+	var clicks = 0;
 	return{
 		link: function ($scope, element){
 			element.bind('click',function(){
-				Team1 = $scope.team.players;
+				if(clicks > 0){
+					lastElement.css('background-color','#000080');
+					selectedTeams.splice(selectedTeams.indexOf(lastElement),1)
+				}
+				clicks++;
+				Team1 = $scope.team;
 				$scope.team.players.team = 'home';
-				console.log($scope.team)
-				console.log(this)
-				$(this).css('background-color','#cacaca')
-				heads = ($scope.team.logo);
-				homeSymbol = $scope.team.symbol
+				$(this).css('background-color','white');
+				$(this).css('border-radius','10px');
+				lastElement = $(this);
+				selectedTeams.push($(this))
 			})
 		}
 	}
 })
 footballApp.directive('awayClick', function(){
+	var lastElement;
+	var clicks = 0;
 	return{
 		link: function ($scope, element){
 			element.bind('click',function(){
-				Team2 = $scope.team.players
+				if(clicks > 0){
+					lastElement.css('background-color','#000080');
+					selectedTeams.splice(selectedTeams.indexOf(lastElement),1)
+				}
+				clicks++;
+				Team2 = $scope.team;
 				$scope.team.players.team = 'away';
-				console.log($scope.team)
-				$(this).css('background-color','#cacaca')
-				tails = $scope.team.logo;
-				console.log($scope.tails)
-				awaySymbol = $scope.team.symbol
+				$(this).css('background-color','white');
+				$(this).css('border-radius','10px');
+				lastElement = $(this);
+				selectedTeams.push($(this))
 			})
 		}
 	}
@@ -217,14 +232,22 @@ footballApp.controller('setupController', function ($scope){
 	$scope.teams = teams;
 
 
+	// $scope.checkSelectedTeams = function(){
+	// 	if(selectedTeams.length > 1){
+	// 		return  true;
+	// 	}else{
+	// 		return  false;
+	// 	}
+	// }
 
 })
 
 footballApp.controller('coinFlipController',function ($scope, $routeParams){
-	$scope.tails = tails;
-	$scope.heads = heads;
-	$scope.homeSymbol = homeSymbol;
-	$scope.awaySymbol = awaySymbol;
+	$scope.tails = Team2.logo;
+	$scope.heads = Team1.logo;
+	$scope.homeSymbol = Team1.symbol;
+	$scope.awaySymbol = Team2.symbol;
+	$scope.teamName = Team2.name;
 	$scope.coinFlip = function (choice){
 		var num = Math.floor(Math.random()*6)+10;
 		var coin = '';
@@ -233,13 +256,12 @@ footballApp.controller('coinFlipController',function ($scope, $routeParams){
 		}else{
 			coin = 'heads'
 		}
-		console.log(num,coin,choice)
 		if(choice == coin){
-			startingTeam = Team2;
+			startingTeam = Team2.players;
 			currYardLine = 80;
 			firstDownMarker = currYardLine - yardsToGo;
 		}else{
-			startingTeam = Team1;
+			startingTeam = Team1.players;
 		}
 
 		$('#coin').css('transition', 'all '+num*0.2+'s');
@@ -256,19 +278,18 @@ footballApp.controller('coinFlipController',function ($scope, $routeParams){
 	}
 });
 footballApp.controller('gameController', function ($scope){
-
 		$scope.team = startingTeam;
-		$scope.homeScore = '00';
-		$scope.awayScore = '00';
+		$scope.homeScore = homeScore;
+		$scope.awayScore = awayScore;
 		$scope.down = currDown;
 		$scope.yardsToGo = yardsToGo;
+		$scope.homeTeam = Team1.name;
+		$scope.awayTeam = Team2.name;
 		setYardLine();
 	
 	$scope.makePlay = function(){	
 		var who = $(this)[0].player.id;
-		console.log(this)
 		var poss = this.$parent.team.team;
-		console.log(poss)
 		var type = $(this)[0].player.playType;
 		var speed = $(this)[0].player.speed;
 		var strength = $(this)[0].player.strength;
@@ -308,35 +329,37 @@ footballApp.controller('gameController', function ($scope){
 		lateralLocation();
 		updateDown(yards,poss);
 		checkTouchdown(currYardLine);
-		setYardLine();
-			
+		setYardLine();			
 	}
 	function checkTouchdown(position){
 		if(position >= 100){
-			$scope.homeScore = Number($scope.homeScore) + 7;
-			if(($scope.homeScore < 10)&&(!homeAppended)){
-				$scope.homeScore = '0' + $scope.homeScore;
+			homeScore = Number(homeScore) + 7;
+			if((homeScore < 10)&&(!homeAppended)){
+				homeScore = '0' + homeScore;
 				homeAppended = true;
 			}
 			alert('Touchdown!');
 			currYardLine = 80;
-			$scope.team = Team2;
+			$scope.team = Team2.players;
 			firstDownMarker = currYardLine - 10;
 			clearField();
 			firstDown();
 		}else if(position <= 0){
 			alert('away team scored');
-			$scope.awayScore = Number($scope.awayScore) + 7;
-			if(($scope.awayScore < 10)&&(!awayAppended)){
-				$scope.awayScore = '0'+$scope.awayScore;
+			awayScore = Number(awayScore) + 7;
+			if((awayScore < 10)&&(!awayAppended)){
+				awayScore = '0'+awayScore;
 				awayAppended = true;
 			}
 			currYardLine = 20;
-			$scope.team = Team1;
+			$scope.team = Team1.players;
 			firstDownMarker = currYardLine + 10;
 			clearField();
 			firstDown();
 		}
+		$scope.homeScore = homeScore;
+		$scope.awayScore = awayScore;
+		console.log($scope.homeScore,$scope.awayScore)
 	}
 	function firstDown(){
 		currDown = 1;
@@ -404,7 +427,7 @@ footballApp.controller('gameController', function ($scope){
 				yardsToGo = yardsToGo - yards;
 				$('#special-teams').show();
 			}else if(currDown == 4){
-				$scope.team = Team2;
+				$scope.team = Team2.players;
 				alert('Turnover on Downs');
 				firstDown()
 				clearField();
@@ -425,7 +448,7 @@ footballApp.controller('gameController', function ($scope){
 				yardsToGo = yardsToGo - yards;
 				$('#special-teams').show();
 			}else if(currDown == 4){
-				$scope.team = Team1;
+				$scope.team = Team1.players;
 				alert('Turnover on Downs');
 				firstDown();
 				clearField();
@@ -463,7 +486,6 @@ footballApp.controller('gameController', function ($scope){
 	}
 
 	function lateralLocation(){
-		console.log(latLoc)
 		var leftHash = 150;
 		var rightHash = 230;
 		if(latLoc === rightHash){
