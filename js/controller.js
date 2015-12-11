@@ -148,20 +148,20 @@ TennesseePlayers.push(new Player('Josh Smith','receiver',90,90,'big-receiver','p
 TennesseePlayers.push(new Player('Von Pearson','receiver',90,85,'med-receiver','pass'));
 TennesseePlayers.push(new Player('Josh Malone','receiver',80,90,'small-receiver','pass'));
 // Team Array Assembly
-teams.push(new Team('Alabama',AlabamaPlayers,'../media/Alabama\ Logo.png','AL'));
-teams.push(new Team('Arkansas',ArkansasPlayers,'../media/arkansasLogo.png','AR'));
-teams.push(new Team('Auburn',AuburnPlayers,'../media/Auburn\ Logo.png','AU'));
-teams.push(new Team('Florida',FloridaPlayers,'../media/FloridaLogo.png','UF'));
-teams.push(new Team('Georgia',GeorgiaPlayers,'../media/Georgia\ Logo.png','UGA'));
-teams.push(new Team('Kentucky',KentuckyPlayers,'../media/kentuckyLogo.png','UK'));
-teams.push(new Team('LSU',LSUPlayers,'../media/LSULogo.png','LSU'));
-teams.push(new Team('Ole Miss',OleMissPlayers,'../media/oleMissLogo.png','MISS'));
-teams.push(new Team('Miss State',MissStatePlayers,'../media/MissStateLogo.png','MSST'));
-teams.push(new Team('Mizzou',MizzouPlayers,'../media/mizzouLogo.png','MZ'));
-teams.push(new Team('S. Car',SouthCarolinaPlayers,'../media/SouthCarolinaLogo.png','SC'));
-teams.push(new Team('Tenn',TennesseePlayers,'../media/tennesseeLogo.png','UT'));
-teams.push(new Team('Tex A&M',TexasAMPlayers,'../media/TexasAMLogo.png','TAMU'));
-teams.push(new Team('Vandy',VanderbiltPlayers,'../media/vanderbiltLogo.png','VANDY'));
+teams.push(new Team('Alabama',AlabamaPlayers,'media/Alabama\ Logo.png','AL'));
+teams.push(new Team('Arkansas',ArkansasPlayers,'media/arkansasLogo.png','AR'));
+teams.push(new Team('Auburn',AuburnPlayers,'media/Auburn\ Logo.png','AU'));
+teams.push(new Team('Florida',FloridaPlayers,'media/FloridaLogo.png','UF'));
+teams.push(new Team('Georgia',GeorgiaPlayers,'media/Georgia\ Logo.png','UGA'));
+teams.push(new Team('Kentucky',KentuckyPlayers,'media/kentuckyLogo.png','UK'));
+teams.push(new Team('LSU',LSUPlayers,'media/LSULogo.png','LSU'));
+teams.push(new Team('Ole Miss',OleMissPlayers,'media/oleMissLogo.png','MISS'));
+teams.push(new Team('Miss State',MissStatePlayers,'media/MissStateLogo.png','MSST'));
+teams.push(new Team('Mizzou',MizzouPlayers,'media/mizzouLogo.png','MZ'));
+teams.push(new Team('S. Car',SouthCarolinaPlayers,'media/SouthCarolinaLogo.png','SC'));
+teams.push(new Team('Tenn',TennesseePlayers,'media/tennesseeLogo.png','UT'));
+teams.push(new Team('Tex A&M',TexasAMPlayers,'media/TexasAMLogo.png','TAMU'));
+teams.push(new Team('Vandy',VanderbiltPlayers,'media/vanderbiltLogo.png','VANDY'));
 
 
 
