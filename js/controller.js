@@ -330,13 +330,13 @@ footballApp.controller('gameController', function ($scope){
 	};
 	function regenerateEnergy(){
 		$.each(Team1.players,function(){
-			this.energy += Math.round((100-this.energy)*0.05);
+			this.energy += Math.round((100-this.energy+9)*0.05);
 			if(this.energy > 100){
 				this.energy = 100;
 			}
 		})
 		$.each(Team2.players,function(){
-			this.energy += Math.round((100-this.energy)*0.05);
+			this.energy += Math.round((100-this.energy+9)*0.05);
 			if(this.energy > 100){
 				this.energy = 100;
 			}
