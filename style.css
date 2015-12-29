@@ -16,10 +16,8 @@ body{
 }
 .scoreboard{
 	border-radius: 20px;
-	opacity: 0.8;
 }
 #field{
-	opacity: 0.8;
 }
 #home-score, #away-score, #down, #yards-to-go, #yard-line{
 	position: absolute;
@@ -122,9 +120,8 @@ body{
 .play-button{
 	font-size:20px;
 	font-family: 'Black Ops One';
-	background-color: #cf5300;
-	color: #000080;
-	opacity: 0.8;
+	background-color: #000080;
+	color: #cf5300;
 }
 #message-wrapper{
 	display:block;

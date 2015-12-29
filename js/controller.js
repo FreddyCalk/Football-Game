@@ -16,6 +16,7 @@ var awaySymbol;
 var homeScore = '00';
 var awayScore = '00';
 var selectedTeams = [];
+var poss;
 
 function Player (name, position, speed, strength, id, playType){
 	this.name = name;
@@ -279,12 +280,13 @@ footballApp.controller('coinFlipController',function ($scope, $routeParams){
 });
 footballApp.controller('gameController', function ($scope){
 		clearField();
+
 		$scope.team = startingTeam;
 		$scope.homeTeam = Team1.name;
 		$scope.awayTeam = Team2.name;
 	$scope.makePlay = function(){	
 		var who = $(this)[0].player.id;
-		var poss = this.$parent.team.team;
+		poss = this.$parent.team.team;
 		var type = $(this)[0].player.playType;
 		var speed = $(this)[0].player.speed;
 		var strength = $(this)[0].player.strength;
@@ -309,7 +311,7 @@ footballApp.controller('gameController', function ($scope){
 				yards = smallReceiver(speed,strength);
 				break;
 		};
-		$(this)[0].player.energy = Math.floor($(this)[0].player.energy*((100 - (1.5*yards))/100));
+		$(this)[0].player.energy = Math.floor($(this)[0].player.energy*((100 - (1.5*yards + 5))/100));
 		regenerateEnergy();
 		if(type == 'run'){
 			drawRun(yards,poss);
@@ -318,16 +320,96 @@ footballApp.controller('gameController', function ($scope){
 		};	
 		if(poss == 'home'){
 			currYardLine += yards;
-			setYardLine();
+			
 		}else if(poss == 'away'){
 			currYardLine -= yards;
-			setYardLine();
 		};
 		lateralLocation();
-		updateDown(yards,poss);
+		
 		checkTouchdown(currYardLine);
-			
+		updateDown(yards,poss);	
+		setYardLine();		
 	};
+	$scope.fieldGoal = function(){
+		var chances = Math.random()
+		console.log(poss);
+		if(poss == 'home'){
+			if(currYardLine>80){
+				homeScore = (Number(homeScore)+3);
+				currYardLine = 80;
+			}else if((currYardLine>70)&&(chances>0.1)){
+				homeScore = (Number(homeScore)+3);
+				currYardLine = 80;
+			}else if((currYardLine>60)&&(chances>0.4)){
+				homeScore = (Number(homeScore)+3);
+				currYardLine = 80;
+			}else{
+				alert("No Good!")
+			}
+			firstDownMarker = currYardLine - 10;
+			firstDown();
+			$scope.team = Team2.players;
+			if((homeScore < 10)&&(!homeAppended)){
+				homeScore = '0'+homeScore;
+				homeAppended = true;
+			}
+		}else if(poss == 'away'){
+			if(currYardLine<20){
+				awayScore = (Number(awayScore)+3)
+				currYardLine = 20;
+			}else if((currYardLine<30)&&(chances>0.1)){
+				awayScore = (Number(awayScore)+3)
+				currYardLine = 20;
+			}else if((currYardLine<40)&&(chances>0.4)){
+				awayScore = (Number(awayScore)+3)
+				currYardLine = 20;
+			}else{
+				alert("No Good!")
+			}
+			firstDownMarker = currYardLine + 10;
+			firstDown();
+			$scope.team = Team1.players;
+			if((awayScore < 10)&&(!awayAppended)){
+				awayScore = '0'+awayScore;
+				awayAppended = false;
+			}
+		}
+		setScore()
+		setYardLine();
+		clearField();
+
+	}
+	$scope.punt = function(){
+		var goodKick = Math.random();
+		var distance = 0;
+		if(goodKick<=0.05){
+			distance = Math.floor(Math.random()*15)+20;
+		}else if(goodKick<=0.9){
+			distance = Math.floor(Math.random()*20)+35;
+		}else{
+			distance = Math.floor(Math.random()*15)+55;
+		}		
+		drawPunt(distance,poss);
+		setTimeout(clearField,2000);
+		if(poss == 'home'){
+			currYardLine += distance;
+			if(currYardLine >= 100){
+				currYardLine = 80;
+			}
+			firstDownMarker = currYardLine - 10;
+			firstDown();
+			$scope.team = Team2.players;
+		}else if(poss == 'away'){
+			currYardLine -= distance;
+			if(currYardLine <= 0){
+				currYardLine = 20;
+			}
+			firstDownMarker = currYardLine + 10;
+			firstDown();
+			$scope.team = Team1.players;
+		}
+		setYardLine();
+	}
 	function regenerateEnergy(){
 		$.each(Team1.players,function(){
 			this.energy += Math.round((100-this.energy+9)*0.05);
@@ -368,9 +450,12 @@ footballApp.controller('gameController', function ($scope){
 			clearField();
 			firstDown();
 		};
+		setScore();
+	};
+	function setScore(){
 		$scope.homeScore = homeScore;
 		$scope.awayScore = awayScore;
-	};
+	}
 	function firstDown(){
 		currDown = 1;
 		yardsToGo = 10;
@@ -418,6 +503,27 @@ footballApp.controller('gameController', function ($scope){
 		}
 		context.stroke();
 	};
+	function drawPunt(yards,poss){
+		var canvas = $('#field')[0];
+		var context = canvas.getContext('2d');
+		var currStartYardLine = 0;
+		var newStartYardLine = 0;
+		context.beginPath();
+		context.lineWidth = 10;
+		if(poss == 'home'){
+			currStartYardLine = (currYardLine*6)+88;
+			newStartYardLine = (6*yards) + currStartYardLine;	
+			context.moveTo(currStartYardLine,latLoc);
+			context.bezierCurveTo(currStartYardLine,latLoc-125,currStartYardLine+(6*yards),latLoc-125,currStartYardLine+(6*yards),latLoc);
+		}else if(poss == 'away'){
+			currStartYardLine = currYardLine*6+88;
+			newStartYardLine = (-6*yards) +currStartYardLine;
+			context.moveTo(currStartYardLine,latLoc);
+			context.bezierCurveTo(currStartYardLine,latLoc-125,currStartYardLine-(6*yards),latLoc-125,currStartYardLine-(6*yards),latLoc);
+		}
+		setYardLine();
+		context.stroke();
+	}
 
 	function updateDown(yards,poss){
 		if(poss == 'home'){
@@ -490,7 +596,6 @@ footballApp.controller('gameController', function ($scope){
 		if(yardLine < 10){
 			yardLine = "0" + yardLine;
 		}
-		console.log(yardLine)
 		$scope.currentYardLine = yardLine;
 	}
 
