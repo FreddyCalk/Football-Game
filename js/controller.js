@@ -290,25 +290,26 @@ footballApp.controller('gameController', function ($scope){
 		var type = $(this)[0].player.playType;
 		var speed = $(this)[0].player.speed;
 		var strength = $(this)[0].player.strength;
+		var energy = $(this)[0].player.energy;
 		var yards = 0;
 		switch(who){
 			case 'big-back':
-				yards = bigBack(speed,strength);
+				yards = bigBack(speed,strength,energy);
 				break;
 			case 'med-back':
-				yards = medBack(speed,strength);
+				yards = medBack(speed,strength,energy);
 				break;
 			case 'small-back':
-				yards = smallBack(speed,strength);
+				yards = smallBack(speed,strength,energy);
 				break;
 			case 'big-receiver':
-				yards = bigReceiver(speed,strength);
+				yards = bigReceiver(speed,strength,energy);
 				break;
 			case 'med-receiver':
-				yards = medReceiver(speed,strength);
+				yards = medReceiver(speed,strength,energy);
 				break;
 			case 'small-receiver':
-				yards = smallReceiver(speed,strength);
+				yards = smallReceiver(speed,strength,energy);
 				break;
 		};
 		$(this)[0].player.energy = Math.floor($(this)[0].player.energy*((100 - (1.5*yards + 5))/100));
@@ -614,29 +615,37 @@ footballApp.controller('gameController', function ($scope){
 		}
 	};
 
-	function bigBack(speed,strength){
-		yards = 10;
+	function bigBack(speed,strength,energy){
+		yards = 8;
 		return yards;
 	};
-	function medBack(speed,strength){
+	function medBack(speed,strength,energy){
+		yards = 4;
+		return yards;
+	};
+	function smallBack(speed,strength,energy){
+		yards = 2;
+		return yards;
+	};
+	function bigReceiver(speed,strength,energy){
+		yards = 12;
+		return yards;
+	};
+	function medReceiver(speed,strength,energy){
 		yards = 7;
 		return yards;
 	};
-	function smallBack(speed,strength){
+	function smallReceiver(speed,strength,energy){
 		yards = 3;
 		return yards;
 	};
-	function bigReceiver(speed,strength){
-		yards = 10;
-		return yards;
-	};
-	function medReceiver(speed,strength){
-		yards = 5;
-		return yards;
-	};
-	function smallReceiver(speed,strength){
-		yards = 0;
-		return yards;
-	};
+	function rollDice(N,S){
+		value = 0;
+		for(i=0;i<N;i++){
+			value+= Math.floor(Math.random()*S)+1;
+		}
+		return value
+	}
+
 });
 
