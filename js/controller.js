@@ -156,7 +156,7 @@ teams.push(new Team('Florida',FloridaPlayers,'media/FloridaLogo.png','UF'));
 teams.push(new Team('Georgia',GeorgiaPlayers,'media/Georgia\ Logo.png','UGA'));
 teams.push(new Team('Kentucky',KentuckyPlayers,'media/kentuckyLogo.png','UK'));
 teams.push(new Team('LSU',LSUPlayers,'media/LSULogo.png','LSU'));
-teams.push(new Team('Ole Miss',OleMissPlayers,'media/oleMissLogo.png','MISS'));
+teams.push(new Team('Ole Miss',OleMissPlayers,'media/oleMissLogo.jpg','MISS'));
 teams.push(new Team('Miss State',MissStatePlayers,'media/MissStateLogo.png','MSST'));
 teams.push(new Team('Mizzou',MizzouPlayers,'media/mizzouLogo.png','MZ'));
 teams.push(new Team('S. Car',SouthCarolinaPlayers,'media/SouthCarolinaLogo.png','SC'));
