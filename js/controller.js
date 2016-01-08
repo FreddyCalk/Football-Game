@@ -291,6 +291,7 @@ footballApp.controller('gameController', function ($scope){
 		var speed = $(this)[0].player.speed;
 		var strength = $(this)[0].player.strength;
 		var energy = $(this)[0].player.energy;
+		var chanceOfTurnover = Math.random();
 		var yards = 0;
 		switch(who){
 			case 'big-back':
@@ -312,12 +313,16 @@ footballApp.controller('gameController', function ($scope){
 				yards = smallReceiver(speed,strength,energy);
 				break;
 		};
-		$(this)[0].player.energy = Math.floor($(this)[0].player.energy*((100 - (1.5*yards + 5))/100));
+		if(yards < 30){
+			$(this)[0].player.energy = Math.floor($(this)[0].player.energy*((100 - (1.5*yards + 5))/100));
+		}else{
+			$(this)[0].player.energy = Math.floor($(this)[0].player.energy*((100-30)/100));
+		}
 		regenerateEnergy();
 		if(type == 'run'){
-			drawRun(yards,poss);
+			drawRun(truncatePlay(yards,poss),poss);
 		}else if(type == 'pass'){
-			drawPass(yards,poss);
+			drawPass(truncatePlay(yards,poss),poss);
 		};	
 		if(poss == 'home'){
 			currYardLine += yards;
@@ -326,9 +331,12 @@ footballApp.controller('gameController', function ($scope){
 			currYardLine -= yards;
 		};
 		lateralLocation();
-		
-		checkTouchdown(currYardLine);
-		updateDown(yards,poss);	
+		var turnover = false;
+		turnover = checkTurnover(yards,poss,chanceOfTurnover,type);
+		if(!turnover){
+			updateDown(yards,poss)
+			checkTouchdown(currYardLine);
+		}
 		setYardLine();		
 	};
 	$scope.fieldGoal = function(){
@@ -616,27 +624,93 @@ footballApp.controller('gameController', function ($scope){
 	};
 
 	function bigBack(speed,strength,energy){
-		yards = 8;
+		var combinedChanceOfGain = (speed*.35 + strength*.35 + energy*.35)*Math.random();
+		if(combinedChanceOfGain > 85){
+			yards = rollDice(10,10);
+		}else if(combinedChanceOfGain > 70){
+			yards = rollDice(6,6);
+		}else if(combinedChanceOfGain > 45){
+			yards = rollDice(4,4);
+		}else if(combinedChanceOfGain > 15){
+			yards = rollDice(2,2);
+		}else{
+			yards = -rollDice(1,2);
+		}
 		return yards;
 	};
 	function medBack(speed,strength,energy){
-		yards = 4;
+		var combinedChanceOfGain = (speed*.35 + strength*.35 + energy*.35)*Math.random();
+		if(combinedChanceOfGain > 85){
+			yards = rollDice(10,5);
+		}else if(combinedChanceOfGain > 70){
+			yards = rollDice(5,3);
+		}else if(combinedChanceOfGain > 45){
+			yards = rollDice(2,3);
+		}else if(combinedChanceOfGain > 15){
+			yards = rollDice(1,3);
+		}else{
+			yards = -rollDice(1,3);
+		}
 		return yards;
 	};
 	function smallBack(speed,strength,energy){
-		yards = 2;
+		var combinedChanceOfGain = (speed*.35 + strength*.35 + energy*.35)*Math.random();
+		if(combinedChanceOfGain > 85){
+			yards = rollDice(7,5);
+		}else if(combinedChanceOfGain > 70){
+			yards = rollDice(4,3);
+		}else if(combinedChanceOfGain > 45){
+			yards = rollDice(3,3);
+		}else if(combinedChanceOfGain > 15){
+			yards = rollDice(1,2);
+		}else{
+			yards = -rollDice(1,5);
+		}
 		return yards;
 	};
 	function bigReceiver(speed,strength,energy){
-		yards = 12;
+		var combinedChanceOfGain = (speed*.35 + strength*.35 + energy*.35)*Math.random();
+		if(combinedChanceOfGain > 85){
+			yards = rollDice(10,10);
+		}else if(combinedChanceOfGain > 70){
+			yards = rollDice(6,6);
+		}else if(combinedChanceOfGain > 45){
+			yards = rollDice(4,4);
+		}else if(combinedChanceOfGain > 15){
+			yards = rollDice(2,2);
+		}else{
+			yards = -rollDice(1,5);
+		}
 		return yards;
 	};
 	function medReceiver(speed,strength,energy){
-		yards = 7;
+		var combinedChanceOfGain = (speed*.35 + strength*.35 + energy*.35)*Math.random();
+		if(combinedChanceOfGain > 85){
+			yards = rollDice(10,10);
+		}else if(combinedChanceOfGain > 70){
+			yards = rollDice(6,6);
+		}else if(combinedChanceOfGain > 45){
+			yards = rollDice(4,4);
+		}else if(combinedChanceOfGain > 15){
+			yards = rollDice(2,2);
+		}else{
+			yards = -rollDice(1,5);
+		}
 		return yards;
 	};
 	function smallReceiver(speed,strength,energy){
-		yards = 3;
+		var combinedChanceOfGain = (speed*.35 + strength*.35 + energy*.35)*Math.random();
+		if(combinedChanceOfGain > 85){
+			yards = rollDice(10,10);
+		}else if(combinedChanceOfGain > 70){
+			yards = rollDice(6,6);
+		}else if(combinedChanceOfGain > 45){
+			yards = rollDice(4,4);
+		}else if(combinedChanceOfGain > 30){
+			yards = rollDice(2,2);
+		}else{
+			yards = -rollDice(1,5);
+		}
 		return yards;
 	};
 	function rollDice(N,S){
@@ -645,6 +719,52 @@ footballApp.controller('gameController', function ($scope){
 			value+= Math.floor(Math.random()*S)+1;
 		}
 		return value
+	};
+	function truncatePlay(yards,poss){
+		var potentialYards = 0;
+		if(poss == 'home'){
+			potentialYards = currYardLine + yards;
+			if(potentialYards > 109){
+				yards = 109 - currYardLine;
+			}
+		}else if(poss == 'away'){
+			potentialYards = currYardLine - yards;
+			if(potentialYards < -9){
+				yards = (-9 - currYardLine)*(-1);
+			}
+		}
+		return yards;
+	}
+	function checkTurnover(yards,poss,chanceOfTurnover,playType){
+		if((poss === 'home')&&(chanceOfTurnover <= 0.05)&&(yards !== 0)){
+			$('.button').attr('poss','away')
+			if(currYardLine >= 100){
+				currYardLine = 80;
+			}
+			firstDown();
+			$scope.team = Team2.players;
+			if(playType == 'run'){
+				alert('Fumble!')
+			}else if(playType == 'pass'){
+				alert('Interception!')
+			}
+			clearField()
+			return true;
+		}else if((poss === 'away')&&(chanceOfTurnover <= 0.05)&&(yards !== 0)){
+			$('.button').attr('poss','home')
+			if(currYardLine <= 0 ){
+				currYardLine = 20;
+			}
+			firstDown();
+			$scope.team = Team1.players;
+			if(playType == 'run'){
+				alert('Fumble!')
+			}else if(playType == 'pass'){
+				alert('Interception!')
+			}
+			clearField();
+			return true;
+		}
 	}
 
 });
