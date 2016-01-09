@@ -3,6 +3,7 @@ var currDown = 1;
 var yardsToGo = 10;
 var firstDownMarker = currYardLine + yardsToGo;
 var latLoc = 190;
+var mod = 0.4;
 var moveRight = false;
 var homeAppended = false;
 var awayAppended = false;
@@ -187,42 +188,60 @@ footballApp.config(function ($routeProvider){
 
 footballApp.directive('homeClick', function(){
 	var lastElement;
+	var lastTeam;
 	var clicks = 0;
 	return{
 		link: function ($scope, element){
 			element.bind('click',function(){
 				if(clicks > 0){
 					lastElement.css('background-color','#000080');
-					selectedTeams.splice(selectedTeams.indexOf(lastElement),1)
+					selectedTeams.splice(selectedTeams.indexOf(lastTeam),1);
+					lastTeam.players.team = undefined;
 				}
 				clicks++;
-				Team1 = $scope.team;
-				$scope.team.players.team = 'home';
-				$(this).css('background-color','white');
-				$(this).css('border-radius','10px');
-				lastElement = $(this);
-				selectedTeams.push($(this))
+				if(!$scope.team.players.team){
+					Team1 = $scope.team;
+					$scope.team.players.team = 'home';
+					$(this).css('background-color','white');
+					$(this).css('border-radius','10px');
+					lastElement = $(this);
+					lastTeam = $scope.team;
+					selectedTeams.push($scope.team);
+					
+					console.log(selectedTeams);
+				}else{
+					clicks = 0;
+				}
+				
 			})
 		}
 	}
 })
 footballApp.directive('awayClick', function(){
 	var lastElement;
+	var lastTeam;
 	var clicks = 0;
 	return{
 		link: function ($scope, element){
 			element.bind('click',function(){
 				if(clicks > 0){
 					lastElement.css('background-color','#000080');
-					selectedTeams.splice(selectedTeams.indexOf(lastElement),1)
+					selectedTeams.splice(selectedTeams.indexOf(lastTeam),1)
+					lastTeam.players.team = undefined;
 				}
 				clicks++;
-				Team2 = $scope.team;
-				$scope.team.players.team = 'away';
-				$(this).css('background-color','white');
-				$(this).css('border-radius','10px');
-				lastElement = $(this);
-				selectedTeams.push($(this))
+				if(!$scope.team.players.team){
+					Team2 = $scope.team;
+					$scope.team.players.team = 'away';
+					$(this).css('background-color','white');
+					$(this).css('border-radius','10px');
+					lastElement = $(this);
+					lastTeam = $scope.team;
+					selectedTeams.push($scope.team);
+					console.log(selectedTeams);
+				}else{
+					clicks = 0;
+				}
 			})
 		}
 	}
@@ -231,15 +250,17 @@ footballApp.directive('awayClick', function(){
 
 footballApp.controller('setupController', function ($scope){
 	$scope.teams = teams;
+	console.log(selectedTeams.length)
+	$(window).click(function(){
+		if(selectedTeams.length < 2){
+			$('#submission').disabled = true;
+		}else{
+			$('#submission').disabled = false;
+		}
 
+	})
+	
 
-	// $scope.checkSelectedTeams = function(){
-	// 	if(selectedTeams.length > 1){
-	// 		return  true;
-	// 	}else{
-	// 		return  false;
-	// 	}
-	// }
 
 })
 
@@ -624,7 +645,7 @@ footballApp.controller('gameController', function ($scope){
 	};
 
 	function bigBack(speed,strength,energy){
-		var combinedChanceOfGain = (speed*.35 + strength*.35 + energy*.35)*Math.random();
+		var combinedChanceOfGain = (speed*mod + strength*mod + energy*mod)*Math.random();
 		if(combinedChanceOfGain > 85){
 			yards = rollDice(10,10);
 		}else if(combinedChanceOfGain > 70){
@@ -639,7 +660,7 @@ footballApp.controller('gameController', function ($scope){
 		return yards;
 	};
 	function medBack(speed,strength,energy){
-		var combinedChanceOfGain = (speed*.35 + strength*.35 + energy*.35)*Math.random();
+		var combinedChanceOfGain = (speed*mod + strength*mod + energy*mod)*Math.random();
 		if(combinedChanceOfGain > 85){
 			yards = rollDice(10,5);
 		}else if(combinedChanceOfGain > 70){
@@ -654,7 +675,7 @@ footballApp.controller('gameController', function ($scope){
 		return yards;
 	};
 	function smallBack(speed,strength,energy){
-		var combinedChanceOfGain = (speed*.35 + strength*.35 + energy*.35)*Math.random();
+		var combinedChanceOfGain = (speed*mod + strength*mod + energy*mod)*Math.random();
 		if(combinedChanceOfGain > 85){
 			yards = rollDice(7,5);
 		}else if(combinedChanceOfGain > 70){
@@ -669,45 +690,45 @@ footballApp.controller('gameController', function ($scope){
 		return yards;
 	};
 	function bigReceiver(speed,strength,energy){
-		var combinedChanceOfGain = (speed*.35 + strength*.35 + energy*.35)*Math.random();
+		var combinedChanceOfGain = (speed*mod + strength*mod + energy*mod)*Math.random();
 		if(combinedChanceOfGain > 85){
 			yards = rollDice(10,10);
 		}else if(combinedChanceOfGain > 70){
 			yards = rollDice(6,6);
-		}else if(combinedChanceOfGain > 45){
+		}else if(combinedChanceOfGain > 40){
 			yards = rollDice(4,4);
 		}else if(combinedChanceOfGain > 15){
-			yards = rollDice(2,2);
+			yards = 0;
 		}else{
-			yards = -rollDice(1,5);
+			yards = -rollDice(1,1);
 		}
 		return yards;
 	};
 	function medReceiver(speed,strength,energy){
-		var combinedChanceOfGain = (speed*.35 + strength*.35 + energy*.35)*Math.random();
+		var combinedChanceOfGain = (speed*mod + strength*mod + energy*mod)*Math.random();
 		if(combinedChanceOfGain > 85){
-			yards = rollDice(10,10);
+			yards = rollDice(9,8);
 		}else if(combinedChanceOfGain > 70){
-			yards = rollDice(6,6);
-		}else if(combinedChanceOfGain > 45){
-			yards = rollDice(4,4);
+			yards = rollDice(5,5);
+		}else if(combinedChanceOfGain > 40){
+			yards = rollDice(3,5);
 		}else if(combinedChanceOfGain > 15){
-			yards = rollDice(2,2);
+			yards = 0;
 		}else{
-			yards = -rollDice(1,5);
+			yards = -rollDice(1,3);
 		}
 		return yards;
 	};
 	function smallReceiver(speed,strength,energy){
-		var combinedChanceOfGain = (speed*.35 + strength*.35 + energy*.35)*Math.random();
+		var combinedChanceOfGain = (speed*mod + strength*mod + energy*mod)*Math.random();
 		if(combinedChanceOfGain > 85){
-			yards = rollDice(10,10);
+			yards = rollDice(8,7);
 		}else if(combinedChanceOfGain > 70){
-			yards = rollDice(6,6);
-		}else if(combinedChanceOfGain > 45){
-			yards = rollDice(4,4);
+			yards = rollDice(4,5);
+		}else if(combinedChanceOfGain > 40){
+			yards = rollDice(2,5);
 		}else if(combinedChanceOfGain > 30){
-			yards = rollDice(2,2);
+			yards = 0;
 		}else{
 			yards = -rollDice(1,5);
 		}
