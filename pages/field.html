@@ -11,6 +11,7 @@
 			<div id="down">{{down}}</div>
 			<div id="yards-to-go">{{yardsToGo}}</div>
 		</div>
+	<div id="field-wrapper">
 		<canvas id="field" width='800px' height='377px'></canvas>
 		<div id='button-container'>
 			<div class='btn' ng-repeat="player in team">
@@ -22,3 +23,4 @@
 			<button class="play-button" id="punt" ng-click="punt()">Punt</button>
 			<button class="play-button" id="field-goal" ng-click="fieldGoal()">Field Goal</button>
 		</div>
+	</div>

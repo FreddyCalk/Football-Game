@@ -18,6 +18,7 @@ var homeScore = '00';
 var awayScore = '00';
 var selectedTeams = [];
 var poss;
+var possessionCounter = 27;
 
 function Player (name, position, speed, strength, id, playType){
 	this.name = name;
@@ -207,8 +208,6 @@ footballApp.directive('homeClick', function(){
 					lastElement = $(this);
 					lastTeam = $scope.team;
 					selectedTeams.push($scope.team);
-					
-					console.log(selectedTeams);
 				}else{
 					clicks = 0;
 				}
@@ -238,7 +237,6 @@ footballApp.directive('awayClick', function(){
 					lastElement = $(this);
 					lastTeam = $scope.team;
 					selectedTeams.push($scope.team);
-					console.log(selectedTeams);
 				}else{
 					clicks = 0;
 				}
@@ -250,7 +248,6 @@ footballApp.directive('awayClick', function(){
 
 footballApp.controller('setupController', function ($scope){
 	$scope.teams = teams;
-	console.log(selectedTeams.length)
 	$(window).click(function(){
 		if(selectedTeams.length < 2){
 			$('#submission').disabled = true;
@@ -358,7 +355,8 @@ footballApp.controller('gameController', function ($scope){
 			updateDown(yards,poss)
 			checkTouchdown(currYardLine);
 		}
-		setYardLine();		
+		setYardLine();
+		checkGameEnd(homeScore,awayScore);	
 	};
 	$scope.fieldGoal = function(){
 		var chances = Math.random()
@@ -407,6 +405,7 @@ footballApp.controller('gameController', function ($scope){
 		setScore()
 		setYardLine();
 		clearField();
+		possessionCounter++;
 
 	}
 	$scope.punt = function(){
@@ -439,6 +438,7 @@ footballApp.controller('gameController', function ($scope){
 			$scope.team = Team1.players;
 		}
 		setYardLine();
+		possessionCounter++;
 	}
 	function regenerateEnergy(){
 		$.each(Team1.players,function(){
@@ -467,6 +467,7 @@ footballApp.controller('gameController', function ($scope){
 			firstDownMarker = currYardLine - 10;
 			clearField();
 			firstDown();
+			possessionCounter++;
 		}else if(position <= 0){
 			alert('away team scored');
 			awayScore = Number(awayScore) + 7;
@@ -479,6 +480,7 @@ footballApp.controller('gameController', function ($scope){
 			firstDownMarker = currYardLine + 10;
 			clearField();
 			firstDown();
+			possessionCounter++;
 		};
 		setScore();
 	};
@@ -576,6 +578,7 @@ footballApp.controller('gameController', function ($scope){
 				alert('Turnover on Downs');
 				firstDown()
 				clearField();
+				possessionCounter++;
 			}
 		}else if(poss == 'away'){
 			if(currYardLine<=firstDownMarker){
@@ -597,6 +600,7 @@ footballApp.controller('gameController', function ($scope){
 				alert('Turnover on Downs');
 				firstDown();
 				clearField();
+				possessionCounter++;
 			}
 		}
 		$scope.down = currDown;
@@ -770,6 +774,7 @@ footballApp.controller('gameController', function ($scope){
 				alert('Interception!')
 			}
 			clearField()
+			possessionCounter++;
 			return true;
 		}else if((poss === 'away')&&(chanceOfTurnover <= 0.05)&&(yards !== 0)){
 			$('.button').attr('poss','home')
@@ -784,7 +789,31 @@ footballApp.controller('gameController', function ($scope){
 				alert('Interception!')
 			}
 			clearField();
+			possessionCounter++;
 			return true;
+		}
+	}
+
+	function checkGameEnd(homeScore,awayScore){
+		if(possessionCounter > 30){
+			// Game Ends
+			$('#field-wrapper').empty();
+			
+			if(homeScore > awayScore){
+				console.log(homeScore,awayScore)
+				var html = '<div id="win-message>'+Team1.name+' has won the game!</div>';
+				$('#field-wrapper').append(html);
+			}
+			if(awayScore > homeScore){
+				console.log(homeScore,awayScore)
+				var html = '<div id="win-message>'+Team2.name+' has won the game!</div>';
+				$('#field-wrapper').append(html);
+			}
+			if(awayScore == homeScore){
+				console.log(homeScore,awayScore)
+				var html = '<div id="win-message>The game ended in a tie!</div>';
+				$('#field-wrapper').append(html);
+			}
 		}
 	}
 

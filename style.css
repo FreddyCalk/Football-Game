@@ -208,4 +208,12 @@ body{
 	margin: 50px 0px 0px 100px;
 	border-radius: 10px;
 }
-
+#win-message{
+	width:850px;
+	text-align: center;
+	height:300px;
+	background-color: #000080;
+	color: #cf5300;
+	font-size:28px;
+	font-family:'Black Ops One';
+}
