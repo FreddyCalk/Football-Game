@@ -18,7 +18,7 @@ var homeScore = '00';
 var awayScore = '00';
 var selectedTeams = [];
 var poss;
-var possessionCounter = 27;
+var possessionCounter = 0;
 
 function Player (name, position, speed, strength, id, playType){
 	this.name = name;
@@ -761,7 +761,7 @@ footballApp.controller('gameController', function ($scope){
 		return yards;
 	}
 	function checkTurnover(yards,poss,chanceOfTurnover,playType){
-		if((poss === 'home')&&(chanceOfTurnover <= 0.05)&&(yards !== 0)){
+		if((poss === 'home')&&(chanceOfTurnover <= 0.02)&&(yards !== 0)){
 			$('.button').attr('poss','away')
 			if(currYardLine >= 100){
 				currYardLine = 80;
@@ -776,7 +776,7 @@ footballApp.controller('gameController', function ($scope){
 			clearField()
 			possessionCounter++;
 			return true;
-		}else if((poss === 'away')&&(chanceOfTurnover <= 0.05)&&(yards !== 0)){
+		}else if((poss === 'away')&&(chanceOfTurnover <= 0.02)&&(yards !== 0)){
 			$('.button').attr('poss','home')
 			if(currYardLine <= 0 ){
 				currYardLine = 20;
@@ -802,16 +802,19 @@ footballApp.controller('gameController', function ($scope){
 			if(homeScore > awayScore){
 				console.log(homeScore,awayScore)
 				var html = '<div id="win-message>'+Team1.name+' has won the game!</div>';
+				alert("Game Over! "+Team1.name+ " has won the game.");
 				$('#field-wrapper').append(html);
 			}
 			if(awayScore > homeScore){
 				console.log(homeScore,awayScore)
 				var html = '<div id="win-message>'+Team2.name+' has won the game!</div>';
+				alert("Game Over! "+Team2.name+ " has won the game.");
 				$('#field-wrapper').append(html);
 			}
 			if(awayScore == homeScore){
 				console.log(homeScore,awayScore)
 				var html = '<div id="win-message>The game ended in a tie!</div>';
+				alert("The game ended in a tie!");
 				$('#field-wrapper').append(html);
 			}
 		}
