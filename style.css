@@ -35,7 +35,7 @@ body{
 	left:20px;
 }
 #away-team{
-	right:220px;
+	right:362px;
 }
 #ball-on{
 	position: absolute;
@@ -219,7 +219,14 @@ body{
 }
 /* --------------------------------  login  ---------------------------------------- */
 
-
+#register-wrapper{
+	width:500px;
+	padding:50px;
+}
+#login-wrapper{
+	width:500px;
+	padding:50px;
+}
 
 
 

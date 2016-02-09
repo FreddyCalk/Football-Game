@@ -1,1 +1,32 @@
-register.html
+
+	<div class="container" ng-controller="loginController" style="color:white">
+		<div id='register-wrapper'>
+			<h1>Registration page</h1>
+			<p class = "lead"> Please enter your username and password below. </p>
+			<br/>
+
+			<form id ="register-form" ng-submit="register()">
+				<div class = "form-group">
+					<label>Username
+					<input class="form-control text" placeholder="Username" name="username" ng-model="username" type="text" required>
+					</label>
+					<label>Password
+					<input class="form-control text" placeholder="Password" name="password" ng-model="password" type="password" required></label><br/>
+					<label>Confirm Password
+					<input class="form-control text" placeholder="Confirm Password" name="confirmPassword" ng-model="confirmPassword" type="password" required></label>
+					<label>Favorite Team
+					<select name="favTeam" ng-model="favTeam" required>
+						<option ng-repeat="team in teams | orderBy: 'name'" value="{{team.name}}">{{team.name}}</option>
+						option
+					</select></label><br/>
+					<input class="btn btn-success" type="submit" value="Sign In!">
+					<a href="#/"><input class = "btn btn-danger" type="button" value="Cancel"></a> 		
+				</div>
+			</form>
+			<div>Already Signed up? Click <a href="#/login">Here</a></div>
+		</div>
+	</div>
+
+
+
+
