@@ -1,0 +1,28 @@
+
+	<div class="container" ng-controller="loginController" style="color:white">
+		<div id='login-wrapper'>
+			<h1> Login page</h1>
+			<p class = "lead"> Please enter your username and password below. </p>
+			<br/>
+
+			<form id ="login-form" ng-submit="login()">
+				<div class = "form-group">
+					<label>Username
+					<input class="form-control text" placeholder="Username" name="username" ng-model="username" type="text" required>
+					</label>
+					<label>Password
+					<input class="form-control text" placeholder="Password" name="password" ng-model="password" type="password" required></label>
+					<input class="btn btn-success" type="submit" value="Sign In!">
+					
+				</div>
+			</form>
+			<a href="/"><input class = "btn btn-danger" type="button" value="Cancel"></a> 
+			<div class="container">
+				<div>Not Registered Yet? Click <a href="#/signup"><button>Here</button></a></div>
+			</div>
+		</div>
+	</div>
+
+
+
+

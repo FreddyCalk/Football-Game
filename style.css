@@ -1,9 +1,9 @@
 body{
 	position:relative;
-	width:1000px;
 	background-image: url('media/NATTYCHAMPS.jpg');
 	background-size: 1600px;
 	background-repeat: no-repeat;
+	width:1000px;
 }
 @media screen and(min-width: 1530px){
 	body{
@@ -217,3 +217,16 @@ body{
 	font-size:28px;
 	font-family:'Black Ops One';
 }
+/* --------------------------------  login  ---------------------------------------- */
+
+
+
+
+
+
+
+
+
+
+
+
