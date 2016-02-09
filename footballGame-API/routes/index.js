@@ -1,4 +1,5 @@
 var express = require('express');
+var passport = require('passport');
 var router = express.Router();
 var Account = require('../models/account.js');
 var Team = require('../models/team.js');
@@ -20,40 +21,32 @@ router.get('/edit', function (req, res, next){
 })
 
 router.post('/signup', function (req, res, next){
-	// if((req.body.password === req.body.passwordConfirm)&&(req.body.password.length >= 7)){
-	// 	Account.register(new Account(
-	// 			{username: req.body.username,
-	// 			favTeam: req.body.favTeam}),
-	// 			req.body.password,
-	// 		function (err, account){
-	// 			if(err){
-	// 				return res.render('register', {err: "That username is already in use", passErr: false, username: "",
-	// 					firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email })
-	// 			}
-	// 				passport.authenticate('local') (req, res, function (){
-	// 					req.session.username = req.body.username;
-	// 					res.redirect('/choices')
-	// 			})
-	// 		}
-	// 	)
-	// }else if(req.body.password !== req.body.passwordConfirm){
-	// 	var message = 'Your Passwords did not match';
-	// 	res.render('register', {err: false, passErr: message, username: req.body.username,
-	// 					firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email });
-	// }else if(req.body.password.length < 7){
-	// 	var message = 'Your password must be at least 7 characters long';
-	// 	res.render('register', {err: false, passErr: message, username: req.body.username,
-	// 					firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email });
-	// }
 	console.log(req.body)
-	res.json({status: 'success', favTeam: req.body.favTeam})
+	// if(req.body.username){
+	// 	Account.register(new Account({ username : req.body.username}), req.body.password, function (err, account){
+	// 		if(err){
+	// 			return res.json({status:'failure'})
+	// 		}
+	// 		passport.authenticate('local')(req, res, function(){
+	// 		})
+	// 	})
+	// }
+	res.json({status: req.body})
 })
 
 
 router.post('/login', function (req, res, next){
-	console.log(req.body)
-	res.json({status: 'success', favTeam: 'Auburn'})
-	// Account.find({})
+	passport.authenticate('local', function (err, user, info){
+		console.log(req.body)
+
+
+		// Account.findOne({username: req.body.username}, function (err, user){
+		// 	if(user){
+		// 		res.json({status: 'success', username: user.username, favTeam: user.favTeam})
+		// 	}
+		// })
+		res.json({status: 'success', username: req.body.username})
+	})
 })
 
 module.exports = router;

@@ -113,22 +113,22 @@ body{
 	font-family: 'Black Ops One';
 	opacity: 0.8;
 	border-radius: 7px;
-	background-color: #000080;
-	color: #cf5300;
+/*	background-color: #000080;
+	color: #cf5300;*/
 
 }
 .play-button{
 	font-size:20px;
 	font-family: 'Black Ops One';
-	background-color: #000080;
-	color: #cf5300;
+/*	background-color: #000080;
+	color: #cf5300;*/
 }
 #message-wrapper{
 	display:block;
 }
 #message{
-	color:#cf5300;
-	background-color:#000080;
+/*	color:#cf5300;
+	background-color:#000080;*/
 	font-family: 'Black Ops One';
 	padding:20px;
 	border-radius: 10px;
@@ -170,10 +170,10 @@ body{
 #home-container p, #away-container p{
 	font-size: 48px;
 	padding-top: 20px;
-	color: #cf5300;
+	/*color: #cf5300;*/
 	margin: 0px 0px 0px 50px;
 	border-radius: 10px 10px 0px 0px;
-	background-color: #000080;
+	/*background-color: #000080;*/
 	text-align: center;
 	font-family: 'Black Ops One';
 	opacity: 0.9;
@@ -187,8 +187,8 @@ body{
 	width:300px;
 	padding: 25px;
 	border-radius: 0px 0px 10px 10px;
-	color: #cf5300;
-	background-color: #000080;
+/*	color: #cf5300;
+	background-color: #000080;*/
 	opacity: 0.9;
 	font-family: 'Black Ops One';
 	font-size: 30px;
@@ -201,8 +201,8 @@ body{
 	width: 850px;
 	opacity: 0.9;
 	padding:10px;
-	background-color: #000080;
-	color: #cf5300;
+/*	background-color: #000080;
+	color: #cf5300;*/
 	font-size: 72px;
 	font-family: 'Black Ops One';
 	margin: 50px 0px 0px 100px;
@@ -212,8 +212,8 @@ body{
 	width:850px;
 	text-align: center;
 	height:300px;
-	background-color: #000080;
-	color: #cf5300;
+/*	background-color: #000080;
+	color: #cf5300;*/
 	font-size:28px;
 	font-family:'Black Ops One';
 }
@@ -226,6 +226,10 @@ body{
 #login-wrapper{
 	width:500px;
 	padding:50px;
+}
+
+#fav-team{
+	width: 192px;
 }
 
 

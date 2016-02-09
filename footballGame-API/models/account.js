@@ -13,5 +13,5 @@ var Account = new Schema({
 
 Account.plugin(passportLocalMongoose);
 
-module.exports = mongoose.model('account', Account)
+module.exports = mongoose.model('Account', Account)
 

@@ -19,6 +19,8 @@ var awayScore = '00';
 var selectedTeams = [];
 var poss;
 var possessionCounter = 0;
+var primaryColor = '';
+var secondaryColor = '';
 
 var footballApp = angular.module('footballApp', ['ngRoute','ngCookies']);
 footballApp.config(function ($routeProvider){
@@ -50,22 +52,20 @@ footballApp.config(function ($routeProvider){
 		redirectTo: '/'
 	});
 });
-var username;
-var favTeam;
 
 footballApp.controller('homeController', function ($scope, $http){
 
 })
 
-footballApp.controller('loginController', ['$cookies', '$scope', '$http', function ($scope, $http, $cookies){
+footballApp.controller('loginController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
 	$('#login-wrapper').css('background-color','rgba(0,0,0,.8)')
 	$scope.login = function(){
 		var url = "http://localhost:3000/login";
-		var data = {
+		var info = {
 			username: $scope.username,
 			password: $scope.password
 		}
-		$http.post(url, data).success(function (data, status) {
+		$http.post(url, info).success(function (data, status) {
 			console.log(data.status)
 			if(data.err){
 				$scope.loggedin = false;
@@ -82,7 +82,7 @@ footballApp.controller('loginController', ['$cookies', '$scope', '$http', functi
     }
 }])
 
-footballApp.controller('registerController', ['$cookies', '$scope', '$http', function ($scope, $http, $cookies){
+footballApp.controller('registerController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
 	var url = "http://localhost:3000/teams";
 	$('#register-wrapper').css('background-color','rgba(0,0,0,.8)')
 	$http.get(url).success(function (data){
@@ -92,13 +92,14 @@ footballApp.controller('registerController', ['$cookies', '$scope', '$http', fun
 
 	$scope.register = function(){
 		var url = "http://localhost:3000/signup";
-		var data = {
+		var info = {
 			username: $scope.username,
 			password: $scope.password,
 			confirmPassword: $scope.confirmPassword,
 			favoriteTeam: $scope.favTeam
 		}
-		$http.post(url, data).success(function (data, status) {
+		console.log(info)
+		$http.post(url, info).success(function (data, status) {
 			if(data.err){
 				$scope.loggedin = false;
 				$scope.message = data.err;
@@ -108,6 +109,8 @@ footballApp.controller('registerController', ['$cookies', '$scope', '$http', fun
 				console.log("success");
 				$scope.loggedin = true;
 				$scope.success = data.status;
+				$cookies.put('username', data.username)
+				$cookies.put('favTeam', data.favoriteTeam)
 				window.location.href = "#/selectSides"
 			}
         })
@@ -174,14 +177,14 @@ footballApp.directive('awayClick', function(){
 })
 
 
-footballApp.controller('setupController', ['$cookies', '$scope', '$http', function ($scope, $http, $cookies){
+footballApp.controller('setupController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
 	var url = "http://localhost:3000/teams";
 	$http.get(url).success(function (data){
 		$scope.teams = data;
 	})
 }])
 
-footballApp.controller('coinFlipController', ['$cookies', '$scope', '$http', function ($scope, $http, $cookies){
+footballApp.controller('coinFlipController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
 	$scope.tails = Team2.logo;
 	$scope.heads = Team1.logo;
 	$scope.homeSymbol = Team1.symbol;
@@ -216,7 +219,7 @@ footballApp.controller('coinFlipController', ['$cookies', '$scope', '$http', fun
 
 	}
 }]);
-footballApp.controller('gameController', ['$cookies', '$scope', '$http', function ($scope, $http, $cookies){
+footballApp.controller('gameController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
 		clearField();
 
 		$scope.team = startingTeam;
