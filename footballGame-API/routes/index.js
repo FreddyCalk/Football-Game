@@ -22,30 +22,35 @@ router.get('/edit', function (req, res, next){
 
 router.post('/signup', function (req, res, next){
 	console.log(req.body)
-	// if(req.body.username){
-	// 	Account.register(new Account({ username : req.body.username}), req.body.password, function (err, account){
-	// 		if(err){
-	// 			return res.json({status:'failure'})
-	// 		}
-	// 		passport.authenticate('local')(req, res, function(){
-	// 		})
-	// 	})
-	// }
-	res.json({status: req.body})
+	if(req.body.password === req.body.confirmPassword){
+		Account.register(new Account({ username : req.body.username, favoriteTeam: req.body.favoriteTeam}), req.body.password, function (err, account){
+			if(err){
+				return res.json({status:'failure'})
+			}
+			passport.authenticate('local')(req, res, function(){
+				return res.json({status: 'success', favTeam : req.body.favoriteTeam})
+			})
+		})
+	}else if(req.body.password !== req.body.confirmPassword){
+		res.json({status: "Passwords do not match"})		
+	}
 })
 
 
 router.post('/login', function (req, res, next){
 	passport.authenticate('local', function (err, user, info){
-		console.log(req.body)
-
-
-		// Account.findOne({username: req.body.username}, function (err, user){
-		// 	if(user){
-		// 		res.json({status: 'success', username: user.username, favTeam: user.favTeam})
-		// 	}
-		// })
-		res.json({status: 'success', username: req.body.username})
+		if(err){
+			return next(err)
+		}
+		if(!user){
+			return res.json({status: 'failure'})
+		}
+		if(user){
+			console.log(user)
+			Team.findOne({name: user.favTeam}, function (err, doc){
+				return res.json({status:'success',username:user.username,favTeam: doc})
+			})
+		}
 	})
 })
 

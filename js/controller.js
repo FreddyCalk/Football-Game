@@ -54,7 +54,7 @@ footballApp.config(function ($routeProvider){
 });
 
 footballApp.controller('homeController', function ($scope, $http){
-
+	$('#home-header').html('<a href="#/signup" class="btn btn-primary">SIGNUP</a><a href="#/login" class="btn btn-primary">LOGIN</a>')
 })
 
 footballApp.controller('loginController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
@@ -67,12 +67,12 @@ footballApp.controller('loginController', ['$scope', '$http', '$cookies', functi
 		}
 		$http.post(url, info).success(function (data, status) {
 			console.log(data.status)
-			if(data.err){
+			if(data.status == 'failure'){
 				$scope.loggedin = false;
 				$scope.message = data.err;
 
 			}
-			if(data.status){
+			if(data.status == 'success'){
 				console.log(data);
 				$scope.loggedin = true;
 				$scope.success = data.status;
@@ -80,6 +80,7 @@ footballApp.controller('loginController', ['$scope', '$http', '$cookies', functi
 			}
         })
     }
+    $('#header').html('<a href="#/signup" class="btn btn-primary">SIGNUP</a>')
 }])
 
 footballApp.controller('registerController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
@@ -105,16 +106,18 @@ footballApp.controller('registerController', ['$scope', '$http', '$cookies', fun
 				$scope.message = data.err;
 
 			}
-			if(data.status){
-				console.log("success");
+			if(data.status == 'success'){
 				$scope.loggedin = true;
 				$scope.success = data.status;
 				$cookies.put('username', data.username)
 				$cookies.put('favTeam', data.favoriteTeam)
 				window.location.href = "#/selectSides"
+			}else{
+				$scope.message = data.status;
 			}
         })
     }
+    $('#header').html('<a href="#/login" class="btn btn-primary">LOGIN</a>')
 }])
 
 footballApp.directive('homeClick', function(){

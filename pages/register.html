@@ -1,9 +1,11 @@
 
-	<div class="container" ng-controller="loginController" style="color:white">
+	<div class="container" ng-controller="registerController" style="color:white">
 		<div id='register-wrapper'>
+			<div id="header"></div>
 			<h1>Registration page</h1>
-			<p class = "lead">Please Fill out the fields below ( * = required)</p>
+			<p class = "lead">Please fill out the fields below ( * = required )</p>
 			<br/>
+			<p>{{message}}</p>
 
 			<form id ="register-form" ng-submit="register()">
 				<div class = "form-group">
