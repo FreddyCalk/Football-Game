@@ -66,18 +66,18 @@ footballApp.controller('loginController', ['$scope', '$http', '$cookies', functi
 			password: $scope.password
 		}
 		$http.post(url, info).success(function (data, status) {
-			console.log(data.status)
 			if(data.status == 'failure'){
 				$scope.loggedin = false;
 				$scope.message = data.err;
 
 			}
 			if(data.status == 'success'){
-				console.log(data);
 				$scope.loggedin = true;
 				$scope.success = data.status;
 				window.location.href = "#/selectSides"
 			}
+        }).error(function (data, status){
+        	console.log(data)
         })
     }
     $('#header').html('<a href="#/signup" class="btn btn-primary">SIGNUP</a>')
@@ -101,10 +101,10 @@ footballApp.controller('registerController', ['$scope', '$http', '$cookies', fun
 		}
 		console.log(info)
 		$http.post(url, info).success(function (data, status) {
-			if(data.err){
+			console.log(data)
+			if(data.status == 'UserExistsError'){
 				$scope.loggedin = false;
-				$scope.message = data.err;
-
+				$scope.message = data.message;
 			}
 			if(data.status == 'success'){
 				$scope.loggedin = true;
@@ -112,8 +112,6 @@ footballApp.controller('registerController', ['$scope', '$http', '$cookies', fun
 				$cookies.put('username', data.username)
 				$cookies.put('favTeam', data.favoriteTeam)
 				window.location.href = "#/selectSides"
-			}else{
-				$scope.message = data.status;
 			}
         })
     }

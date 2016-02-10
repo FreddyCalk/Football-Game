@@ -24,8 +24,9 @@ router.post('/signup', function (req, res, next){
 	console.log(req.body)
 	if(req.body.password === req.body.confirmPassword){
 		Account.register(new Account({ username : req.body.username, favoriteTeam: req.body.favoriteTeam}), req.body.password, function (err, account){
+			console.log(err)
 			if(err){
-				return res.json({status:'failure'})
+				return res.json({status: err.name, message: err.message})
 			}
 			passport.authenticate('local')(req, res, function(){
 				return res.json({status: 'success', favTeam : req.body.favoriteTeam})
@@ -38,9 +39,10 @@ router.post('/signup', function (req, res, next){
 
 
 router.post('/login', function (req, res, next){
+	console.log(req.body)
 	passport.authenticate('local', function (err, user, info){
 		if(err){
-			return next(err)
+			res.send(err)
 		}
 		if(!user){
 			return res.json({status: 'failure'})
@@ -48,7 +50,7 @@ router.post('/login', function (req, res, next){
 		if(user){
 			console.log(user)
 			Team.findOne({name: user.favTeam}, function (err, doc){
-				return res.json({status:'success',username:user.username,favTeam: doc})
+				return res.json({status:'success',username:user.username, favTeam: doc})
 			})
 		}
 	})
