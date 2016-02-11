@@ -2,29 +2,31 @@
 	<div class="container" ng-controller="registerController" style="color:white">
 		<div id='register-wrapper'>
 			<div id="header"></div>
-			<h1>Registration page</h1>
-			<p class = "lead">Please fill out the fields below ( * = required )</p>
-			<br/>
-			<p>{{message}}</p>
+			<div id="login-content">
+				<h1>Registration page</h1>
+				<p class = "lead">Please fill out the fields below ( * = required )</p>
+				<br/>
+				<p style="color:red">{{message}}</p>
 
-			<form id ="register-form" ng-submit="register()">
-				<div class = "form-group">
-					<label>Username *
-					<input class="form-control text" placeholder="Username" name="username" ng-model="username" type="text" required>
-					</label>
-					<label>Password *
-					<input class="form-control text" placeholder="Password" name="password" ng-model="password" type="password" required></label><br/>
-					<label>Confirm Password *
-					<input class="form-control text" placeholder="Confirm Password" name="confirmPassword" ng-model="confirmPassword" type="password" required></label>
-					<label>Favorite Team *
-					<select class="form-control" id="fav-team" name="favTeam" ng-model="favTeam" required>
-						<option ng-repeat="team in teams | orderBy: 'name'" value="{{team.name}}">{{team.name}}</option>
-					</select></label><br/>
-					<input class="btn btn-success" type="submit" value="Sign Up!">
-					<a href="#/"><input class = "btn btn-danger" type="button" value="Cancel"></a> 		
-				</div>
-			</form>
-			<div>Already Signed up? Click <a href="#/login">Here</a></div>
+				<form id ="register-form" ng-submit="register()">
+					<div class = "form-group">
+						<label>Username *
+						<input class="form-control text" placeholder="Username" name="username" ng-model="username" type="text" required>
+						</label>
+						<label>Password *
+						<input class="form-control text" placeholder="Password" name="password" ng-model="password" type="password" required></label><br/>
+						<label>Confirm Password *
+						<input class="form-control text" placeholder="Confirm Password" name="confirmPassword" ng-model="confirmPassword" type="password" required></label>
+						<label>Favorite Team *
+						<select class="form-control" id="fav-team" name="favTeam" ng-model="favTeam" required>
+							<option ng-repeat="team in teams | orderBy: 'name'" value="{{team.name}}">{{team.name}}</option>
+						</select></label><br/>
+						<input class="btn btn-success" type="submit" value="Sign Up!">
+						<a href="#/"><input class = "btn btn-danger" type="button" value="Cancel"></a> 		
+					</div>
+				</form>
+				<div>Already Signed up? Click <a href="#/login">Here</a></div>
+			</div>
 		</div>
 	</div>
 

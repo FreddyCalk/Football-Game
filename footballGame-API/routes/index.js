@@ -72,6 +72,7 @@ router.post('/signup', function (req, res, next){
 
 
 router.post('/login', passport.authenticate('local'), function (req, res){
+		console.log(res);
 		if(!req.user){
 			return res.json({status: 'failure'})
 		}

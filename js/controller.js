@@ -26,6 +26,7 @@ var username = null;
 var favTeam = null;
 
 
+
 var footballApp = angular.module('footballApp', ['ngRoute','ngCookies']);
 footballApp.config(function ($routeProvider){
 	$routeProvider.when('/',{
@@ -75,6 +76,7 @@ footballApp.controller('profileController', function ($scope, $http){
 		window.location.href = "#/"
 	}
 	var allTeams;
+	var whichTeam;
 	$scope.favTeam = favTeam;
 	$('#header').html('<a href="#/selectSides" class="btn btn-primary">Pick Teams</a><a href="#/" class="btn btn-primary">Home</a>')
 	var url = "http://localhost:3000/player-teams";
@@ -83,18 +85,47 @@ footballApp.controller('profileController', function ($scope, $http){
 	$http.post(url,{username:username}).success(function (data){
 		$scope.teams = data.docs[0].teams;
 		allTeams = data.docs[0].teams;
+
 		$('#editTeam').change(function(){
 			var selectedTeam = $('#editTeam').val()
 			for(i=0;i<allTeams.length;i++){
 				if(allTeams[i].name == selectedTeam){
 					$scope.players = allTeams[i].players
+					whichTeam = i;
+					console.log($scope.players)
 				}
 			}
-			console.log($scope.players)
 			$scope.$apply();
 		})
 	})
 
+	$scope.playerUpdate = function(){
+
+		console.log($("[name='bigBack_strength']")[0].value)
+		allTeams[whichTeam].players[0].strength = $("[name='bigBack_strength']")[0].value
+		allTeams[whichTeam].players[0].speed = $("[name='bigBack_speed']")[0].value
+		allTeams[whichTeam].players[1].strength = $("[name='medBack_strength']")[0].value
+		allTeams[whichTeam].players[1].speed = $("[name='medBack_speed']")[0].value
+		allTeams[whichTeam].players[2].strength = $("[name='smallBack_strength']")[0].value
+		allTeams[whichTeam].players[2].speed = $("[name='smallBack_speed']")[0].value
+		allTeams[whichTeam].players[3].strength = $("[name='bigReceiver_strength']")[0].value
+		allTeams[whichTeam].players[3].speed = $("[name='bigReceiver_speed']")[0].value
+		allTeams[whichTeam].players[4].strength = $("[name='medReceiver_strength']")[0].value
+		allTeams[whichTeam].players[4].speed = $("[name='medReceiver_speed']")[0].value
+		allTeams[whichTeam].players[5].strength = $("[name='smallReceiver_strength']")[0].value
+		allTeams[whichTeam].players[5].speed = $("[name='smallReceiver_speed']")[0].value
+
+		var url = 'http://localhost:3000/edit-player';
+		var info = {
+			username: username,
+			teams: allTeams
+		}
+		$http.post(url, info).success(function(data,status){
+			if(data.status == 'success'){
+				$scope.teams = data.teams
+			}
+		})
+	}
 
 	$scope.teamUpdate = function(){
 		var info = {
@@ -117,23 +148,6 @@ footballApp.controller('profileController', function ($scope, $http){
 		})
 	}
 
-	$scope.playerUpdate = function(){
-		var teams = $scope.teams;
-
-		console.log(teams);
-
-		// var info = {
-		// 	username: username,
-		// 	teams:
-
-		// }
-		// var url = 'http://localhost:3000/edit-player';
-		// $http.post(url, info).succes(function (data, status){
-		// 	if(data.status == 'success'){
-		// 		console.log(data)
-		// 	}
-		// })
-	}
 })
 
 footballApp.controller('loginController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
@@ -163,7 +177,7 @@ footballApp.controller('loginController', ['$scope', '$http', '$cookies', functi
 			}
 			$scope.$apply();
         }).error(function (data, status){
-        	console.log(data)
+        	$scope.message = "Your Username or Password do not match"
         })
     }
     $('#header').html('<a href="#/signup" class="btn btn-primary">Signup</a>')
@@ -193,7 +207,7 @@ footballApp.controller('registerController', ['$scope', '$http', '$cookies', fun
 			if(data.status == 'UserExistsError'){
 				$scope.message = data.message;
 			}
-			if(data.status == 'failure'){
+			if(data.status == 'fail'){
 				$scope.message = data.message;
 			}
 			if(data.status == 'success'){
@@ -375,22 +389,22 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 		var chanceOfTurnover = Math.random();
 		var yards = 0;
 		switch(who){
-			case 'big-back':
+			case 'bigBack':
 				yards = bigBack(speed,strength,energy);
 				break;
-			case 'med-back':
+			case 'medBack':
 				yards = medBack(speed,strength,energy);
 				break;
-			case 'small-back':
+			case 'smallBack':
 				yards = smallBack(speed,strength,energy);
 				break;
-			case 'big-receiver':
+			case 'bigReceiver':
 				yards = bigReceiver(speed,strength,energy);
 				break;
-			case 'med-receiver':
+			case 'medReceiver':
 				yards = medReceiver(speed,strength,energy);
 				break;
-			case 'small-receiver':
+			case 'smallReceiver':
 				yards = smallReceiver(speed,strength,energy);
 				break;
 		};
