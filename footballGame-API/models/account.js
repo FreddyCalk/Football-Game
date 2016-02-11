@@ -7,7 +7,8 @@ var Account = new Schema({
 	
 	username: String,
 	password: String,
-	favoriteTeam: String
+	favoriteTeam: String,
+	teams: Array
 
 })
 

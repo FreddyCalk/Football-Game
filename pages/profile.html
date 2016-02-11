@@ -1,0 +1,25 @@
+<div id="profile-wrapper">
+	<div id="header"></div>
+	<div id="edit-wrapper"></div>
+	<form id="update_team_form" ng-submit="teamUpdate()">
+		<label>Update Your Favorite Team
+			<select class="form-control" id="fav-team" name="favTeam" ng-model="favTeam" required>
+				<option ng-selected="{{team.name == favTeam}}" ng-repeat="team in teams | orderBy: 'name'" value="{{team.name}}">{{team.name}}</option>
+			</select>
+		</label>
+		<input type='submit' class="btn btn-warning" value='Update Team'>
+	</form>
+	<form id="update_player_form" ng-submit="playerUpdate()">
+		<label>Which Team
+			<select class="form-control" id="editTeam" name="editTeam" required>
+				<option value=""></option>
+				<option ng-repeat="team in teams | orderBy: 'name'" value="{{team.name}}">{{team.name}}</option>
+			</select></label><br/>
+		<div ng-repeat="player in players | orderBy: 'name'">
+			<div class="player-name">{{player.name}} ( {{player.position}} )</div>
+			<label class="attr-label">Player Strength: <input class="player-stats" type="number" name="{{player.id}}_strength" ng-model="{{player.id}}_strength" min="0" max="100" value="{{player.strength}}"></label><br/>
+			<label class="attr-label">Player Speed: &nbsp&nbsp&nbsp<input class="player-stats" type="number" name="{{player.id}}_speed" ng-model="{{player.id}}_speed" min="0" max="100" value="{{player.speed}}"></label>
+		</div>
+		<input class="btn btn-warning" type="submit" value="Save Changes">
+	</form>
+</div>

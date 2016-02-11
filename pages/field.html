@@ -1,3 +1,4 @@
+	<div id="header"></div>
 		<div id="scoreboard" ng-controller = 'gameController'>
 			<img class = "scoreboard" src="media/scoreboard.png">
 			<div id="home-team">{{homeTeam}}</div>
@@ -14,9 +15,7 @@
 	<div id="field-wrapper">
 		<canvas id="field" width='800px' height='377px'></canvas>
 		<div id='button-container'>
-			<div class='btn' ng-repeat="player in team">
-				<button class="play-button" ng-click="makePlay()" id="{{player.id}}">{{player.name}} <span id="energy">{{player.energy}}%</span></button>
-			</div>
+				<button ng-repeat="player in team" class="play-button" ng-click="makePlay()" id="{{player.id}}">{{player.name}} <span id="energy">{{player.energy}}%</span></button>
 		</div>
 		<div id='special-teams' style="display: none">
 		Special Teams:

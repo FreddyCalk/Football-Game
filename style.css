@@ -1,7 +1,6 @@
 body{
 	position:relative;
-	background-image: url('media/NATTYCHAMPS.jpg');
-	background-size: 1600px;
+	background-size: 100vw;
 	background-repeat: no-repeat;
 	width:1000px;
 }
@@ -35,7 +34,7 @@ body{
 	left:20px;
 }
 #away-team{
-	right:362px;
+	right:224px;
 }
 #ball-on{
 	position: absolute;
@@ -64,7 +63,7 @@ body{
 #yard-line{
 	top:90px;
 	left:305px;
-	border: 3px solid grey;
+	border: 3px solid #ccc;
 	padding:0px 50px;
 }
 .arrow-left{
@@ -109,26 +108,30 @@ body{
 	font-size: 20px;
 	text-align: center;
 	padding: 20px;
-	margin: 30px 10px;
 	font-family: 'Black Ops One';
 	opacity: 0.8;
 	border-radius: 7px;
-/*	background-color: #000080;
-	color: #cf5300;*/
 
+}
+.flip-button{
+	font-size: 20px;
+	text-align: center;
+	padding: 20px;
+	font-family: 'Black Ops One';
+	opacity: 0.8;
+	border-radius: 7px;
+	margin:30px 10px;
 }
 .play-button{
 	font-size:20px;
 	font-family: 'Black Ops One';
-/*	background-color: #000080;
-	color: #cf5300;*/
+	display:inline;
 }
 #message-wrapper{
 	display:block;
+	margin:20px 0px;
 }
 #message{
-/*	color:#cf5300;
-	background-color:#000080;*/
 	font-family: 'Black Ops One';
 	padding:20px;
 	border-radius: 10px;
@@ -144,7 +147,7 @@ body{
 	height:350px;
 	width: 350px;
 	position:absolute;
-	top: 200px;
+	top: 270px;
 	left:120px;
 	transform-style: preserve-3d;
   	display: inline;
@@ -169,11 +172,9 @@ body{
 }
 #home-container p, #away-container p{
 	font-size: 48px;
-	padding-top: 20px;
-	/*color: #cf5300;*/
+	padding: 20px;
 	margin: 0px 0px 0px 50px;
 	border-radius: 10px 10px 0px 0px;
-	/*background-color: #000080;*/
 	text-align: center;
 	font-family: 'Black Ops One';
 	opacity: 0.9;
@@ -184,11 +185,9 @@ body{
 }
 #home-teams, #away-teams{
 	height:350px;
-	width:300px;
-	padding: 25px;
+	width:340px;
+	padding: 0px 25px;
 	border-radius: 0px 0px 10px 10px;
-/*	color: #cf5300;
-	background-color: #000080;*/
 	opacity: 0.9;
 	font-family: 'Black Ops One';
 	font-size: 30px;
@@ -201,8 +200,6 @@ body{
 	width: 850px;
 	opacity: 0.9;
 	padding:10px;
-/*	background-color: #000080;
-	color: #cf5300;*/
 	font-size: 72px;
 	font-family: 'Black Ops One';
 	margin: 50px 0px 0px 100px;
@@ -212,8 +209,6 @@ body{
 	width:850px;
 	text-align: center;
 	height:300px;
-/*	background-color: #000080;
-	color: #cf5300;*/
 	font-size:28px;
 	font-family:'Black Ops One';
 }
@@ -231,20 +226,33 @@ body{
 #fav-team{
 	width: 192px;
 }
-#home-header{
-	margin-top: 20px;
-}
 .btn{
 	margin: 10px 10px 0px 0px;
 }
 
 #home-wrapper{
 	background-color: rgba(0,0,0,.8);
+	padding: 20px;
 	height:100vh;
 	width:100vw;
 	color:white;
 }
 
+#profile-wrapper{
+	height:100vh;
+	width:100vw;
+	color:white;
+}
+.player-stats{
+	color:black;
+	opacity: 1;
+}
+.player-name{
+	font-size: 20px;
+}
+.attr-label{
+	font-weight: normal;
+}
 
 
 

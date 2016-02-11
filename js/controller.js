@@ -19,14 +19,22 @@ var awayScore = '00';
 var selectedTeams = [];
 var poss;
 var possessionCounter = 0;
-var primaryColor = '';
-var secondaryColor = '';
+var primaryColor = null;
+var secondaryColor = null;
+var image_url = null;
+var username = null;
+var favTeam = null;
+
 
 var footballApp = angular.module('footballApp', ['ngRoute','ngCookies']);
 footballApp.config(function ($routeProvider){
 	$routeProvider.when('/',{
 		templateUrl: 'pages/home.html',
 		controller: 'homeController'
+	}).
+	when('/profile',{
+		templateUrl: 'pages/profile.html',
+		controller: 'profileController'
 	}).
 	when('/login',{
 		templateUrl: 'pages/login.html',
@@ -54,11 +62,83 @@ footballApp.config(function ($routeProvider){
 });
 
 footballApp.controller('homeController', function ($scope, $http){
-	$('#home-header').html('<a href="#/signup" class="btn btn-primary">SIGNUP</a><a href="#/login" class="btn btn-primary">LOGIN</a>')
+	if(!username){
+		$('#home-header').html('<a href="#/signup" class="btn btn-primary">Sign Up</a><a href="#/login" class="btn btn-primary">Login</a>')
+		$('body').css('background-image','url("media/NATTYCHAMPS.jpg")')
+	}else{
+		$('#home-header').html('<a href="#/profile" class="btn btn-success">Profile</a><a href="#/selectSides" class="btn btn-primary">Pick Teams</a>')
+	}
+})
+
+footballApp.controller('profileController', function ($scope, $http){
+	if(!username){
+		window.location.href = "#/"
+	}
+	var allTeams;
+	$scope.favTeam = favTeam;
+	$('#header').html('<a href="#/selectSides" class="btn btn-primary">Pick Teams</a><a href="#/" class="btn btn-primary">Home</a>')
+	var url = "http://localhost:3000/player-teams";
+	$('body').css('background-image','url('+image_url+')')
+	$('#profile-wrapper').css('background-color','rgba(0,0,0,.8)')
+	$http.post(url,{username:username}).success(function (data){
+		$scope.teams = data.docs[0].teams;
+		allTeams = data.docs[0].teams;
+		$('#editTeam').change(function(){
+			var selectedTeam = $('#editTeam').val()
+			for(i=0;i<allTeams.length;i++){
+				if(allTeams[i].name == selectedTeam){
+					$scope.players = allTeams[i].players
+				}
+			}
+			console.log($scope.players)
+			$scope.$apply();
+		})
+	})
+
+
+	$scope.teamUpdate = function(){
+		var info = {
+			favoriteTeam: $scope.favTeam,
+			username: username
+		}
+		var url = 'http://localhost:3000/updateFavoriteTeam';
+		$http.post(url, info).success(function (data, status){
+			if(data.status == 'success'){
+				console.log(data)
+				primaryColor = data.favTeam.MainColor;
+				secondaryColor = data.favTeam.AccentColor;
+				image_url = data.favTeam.imageUrl;
+				favTeam = data.favTeam.name;
+
+			}else{
+				console.log(data)
+			}
+			$('body').css('background-image','url('+image_url+')')
+		})
+	}
+
+	$scope.playerUpdate = function(){
+		var teams = $scope.teams;
+
+		console.log(teams);
+
+		// var info = {
+		// 	username: username,
+		// 	teams:
+
+		// }
+		// var url = 'http://localhost:3000/edit-player';
+		// $http.post(url, info).succes(function (data, status){
+		// 	if(data.status == 'success'){
+		// 		console.log(data)
+		// 	}
+		// })
+	}
 })
 
 footballApp.controller('loginController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
 	$('#login-wrapper').css('background-color','rgba(0,0,0,.8)')
+	$('body').css('background-image','url("media/NATTYCHAMPS.jpg")')
 	$scope.login = function(){
 		var url = "http://localhost:3000/login";
 		var info = {
@@ -74,17 +154,24 @@ footballApp.controller('loginController', ['$scope', '$http', '$cookies', functi
 			if(data.status == 'success'){
 				$scope.loggedin = true;
 				$scope.success = data.status;
+				username = data.username;
+				primaryColor = data.favTeam.MainColor;
+				secondaryColor = data.favTeam.AccentColor;
+				image_url = data.favTeam.imageUrl
+				favTeam = data.favTeam.name;
 				window.location.href = "#/selectSides"
 			}
+			$scope.$apply();
         }).error(function (data, status){
         	console.log(data)
         })
     }
-    $('#header').html('<a href="#/signup" class="btn btn-primary">SIGNUP</a>')
+    $('#header').html('<a href="#/signup" class="btn btn-primary">Signup</a>')
 }])
 
 footballApp.controller('registerController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
 	var url = "http://localhost:3000/teams";
+	$('body').css('background-image','url("media/NATTYCHAMPS.jpg")')
 	$('#register-wrapper').css('background-color','rgba(0,0,0,.8)')
 	$http.get(url).success(function (data){
 		$scope.teams = data;
@@ -99,23 +186,31 @@ footballApp.controller('registerController', ['$scope', '$http', '$cookies', fun
 			confirmPassword: $scope.confirmPassword,
 			favoriteTeam: $scope.favTeam
 		}
+		$scope.message = '';
 		console.log(info)
 		$http.post(url, info).success(function (data, status) {
 			console.log(data)
 			if(data.status == 'UserExistsError'){
-				$scope.loggedin = false;
+				$scope.message = data.message;
+			}
+			if(data.status == 'failure'){
 				$scope.message = data.message;
 			}
 			if(data.status == 'success'){
-				$scope.loggedin = true;
 				$scope.success = data.status;
-				$cookies.put('username', data.username)
-				$cookies.put('favTeam', data.favoriteTeam)
-				window.location.href = "#/selectSides"
+				$cookies.put('username', data.username);
+				$cookies.put('favTeam', data.favoriteTeam);
+				username = data.username;
+				primaryColor = data.favTeam.MainColor;
+				secondaryColor = data.favTeam.AccentColor;
+				image_url = data.favTeam.imageUrl
+				favTeam = data.favTeam.name;
+				window.location.href = "#/selectSides";
 			}
+			$scope.$apply();
         })
     }
-    $('#header').html('<a href="#/login" class="btn btn-primary">LOGIN</a>')
+    $('#header').html('<a href="#/login" class="btn btn-primary">Login</a>')
 }])
 
 footballApp.directive('homeClick', function(){
@@ -126,7 +221,7 @@ footballApp.directive('homeClick', function(){
 		link: function ($scope, element){
 			element.bind('click',function(){
 				if(clicks > 0){
-					lastElement.css('background-color','#000080');
+					lastElement.css('background-color',primaryColor);
 					selectedTeams.splice(selectedTeams.indexOf(lastTeam),1);
 					lastTeam.players.team = undefined;
 				}
@@ -134,7 +229,7 @@ footballApp.directive('homeClick', function(){
 				if(!$scope.team.players.team){
 					Team1 = $scope.team;
 					$scope.team.players.team = 'home';
-					$(this).css('background-color','white');
+					$(this).css('background-color','rgba(255,255,255,0.4)');
 					$(this).css('border-radius','10px');
 					lastElement = $(this);
 					lastTeam = $scope.team;
@@ -156,7 +251,7 @@ footballApp.directive('awayClick', function(){
 		link: function ($scope, element){
 			element.bind('click',function(){
 				if(clicks > 0){
-					lastElement.css('background-color','#000080');
+					lastElement.css('background-color',primaryColor);
 					selectedTeams.splice(selectedTeams.indexOf(lastTeam),1)
 					lastTeam.players.team = undefined;
 				}
@@ -164,7 +259,7 @@ footballApp.directive('awayClick', function(){
 				if(!$scope.team.players.team){
 					Team2 = $scope.team;
 					$scope.team.players.team = 'away';
-					$(this).css('background-color','white');
+					$(this).css('background-color','rgba(255,255,255,0.4)');
 					$(this).css('border-radius','10px');
 					lastElement = $(this);
 					lastTeam = $scope.team;
@@ -179,13 +274,37 @@ footballApp.directive('awayClick', function(){
 
 
 footballApp.controller('setupController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
-	var url = "http://localhost:3000/teams";
-	$http.get(url).success(function (data){
-		$scope.teams = data;
+	if(!primaryColor){
+		window.location.href = "#/"
+	}
+	$('body').css('background-image','url('+image_url+')')
+	$('#header').html('<a href="#/" class="btn btn-primary">Home</a><a href="#/profile" class="btn btn-success">Profile</a>')
+	$('#home-container p').css('background-color',primaryColor)
+	$('#home-container p').css('color',secondaryColor)
+	$('#home-teams').css('background-color',primaryColor)
+	$('#home-teams').css('color',secondaryColor)
+	$('#away-container p').css('background-color',primaryColor)
+	$('#away-container p').css('color',secondaryColor)
+	$('#away-teams').css('background-color',primaryColor)
+	$('#away-teams').css('color',secondaryColor)
+	$('#submission').css('background-color',primaryColor)
+	$('#submission-link').css('color',secondaryColor)
+	var url = "http://localhost:3000/player-teams";
+	$http.post(url,{username: username}).success(function (data){
+		$scope.teams = data.docs[0].teams;
 	})
 }])
 
 footballApp.controller('coinFlipController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
+	if(!primaryColor){
+		window.location.href = "#/"
+	}
+	$('#header').html('<a href="#/" class="btn btn-primary">Home</a>')
+	$('body').css('background-image','url('+image_url+')')
+	$('#message').css('background-color',primaryColor)
+	$('#message').css('color',secondaryColor)
+	$('.flip-button').css('background-color',primaryColor)
+	$('.flip-button').css('color',secondaryColor)
 	$scope.tails = Team2.logo;
 	$scope.heads = Team1.logo;
 	$scope.homeSymbol = Team1.symbol;
@@ -215,18 +334,36 @@ footballApp.controller('coinFlipController', ['$scope', '$http', '$cookies', fun
 		},0);
 
 		setTimeout(function(){
+			if(choice == coin){
+				alert(Team2.name +' has won the toss!')
+			}else{
+				alert(Team1.name +' has won the toss!')
+			}
 			window.location.href = '#/field';
-		},(1+num*0.2)*1000);
+		},num*0.2*1000)
 
 	}
 }]);
 footballApp.controller('gameController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
-		clearField();
+	if(!primaryColor){
+		window.location.href = "#/";
+	}
+	$('#header').html('<input class="btn btn-danger" id="quit-game" value="Quit">');
+	$('#quit-game').click(function(){
+		var quit = window.confirm('All game data will be lost. Are you sure you want to quit?')
+		if(quit){
+			window.location.href = '#/';
+		}
 
+	})
+	$('body').css('background-image','url('+image_url+')')
+		clearField();
 		$scope.team = startingTeam;
 		console.log(startingTeam);
 		$scope.homeTeam = Team1.name;
 		$scope.awayTeam = Team2.name;
+	$('.play-button').css('background-color',primaryColor)
+	$('.play-button').css('color',secondaryColor)
 	$scope.makePlay = function(){	
 		var who = $(this)[0].player.id;
 		poss = this.$parent.team.team;
@@ -621,7 +758,6 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 		}else{
 			yards = -rollDice(1,2);
 		}
-		yards = -40;
 		return yards;
 	};
 	function medBack(speed,strength,energy){
