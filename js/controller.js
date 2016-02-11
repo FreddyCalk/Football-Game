@@ -79,7 +79,7 @@ footballApp.controller('profileController', function ($scope, $http){
 	var whichTeam;
 	$scope.favTeam = favTeam;
 	$('#header').html('<a href="#/selectSides" class="btn btn-primary">Pick Teams</a><a href="#/" class="btn btn-primary">Home</a>')
-	var url = "http://localhost:3000/player-teams";
+	var url = "https://football-game-api.herokuapp.com/player-teams";
 	$('body').css('background-image','url('+image_url+')')
 	$('#profile-wrapper').css('background-color','rgba(0,0,0,.8)')
 	$http.post(url,{username:username}).success(function (data){
@@ -92,7 +92,7 @@ footballApp.controller('profileController', function ($scope, $http){
 				if(allTeams[i].name == selectedTeam){
 					$scope.players = allTeams[i].players
 					whichTeam = i;
-					console.log($scope.players)
+
 				}
 			}
 			$scope.$apply();
@@ -101,7 +101,7 @@ footballApp.controller('profileController', function ($scope, $http){
 
 	$scope.playerUpdate = function(){
 
-		console.log($("[name='bigBack_strength']")[0].value)
+
 		allTeams[whichTeam].players[0].strength = $("[name='bigBack_strength']")[0].value
 		allTeams[whichTeam].players[0].speed = $("[name='bigBack_speed']")[0].value
 		allTeams[whichTeam].players[1].strength = $("[name='medBack_strength']")[0].value
@@ -115,7 +115,7 @@ footballApp.controller('profileController', function ($scope, $http){
 		allTeams[whichTeam].players[5].strength = $("[name='smallReceiver_strength']")[0].value
 		allTeams[whichTeam].players[5].speed = $("[name='smallReceiver_speed']")[0].value
 
-		var url = 'http://localhost:3000/edit-player';
+		var url = 'https://football-game-api.herokuapp.com/edit-player';
 		var info = {
 			username: username,
 			teams: allTeams
@@ -132,17 +132,13 @@ footballApp.controller('profileController', function ($scope, $http){
 			favoriteTeam: $scope.favTeam,
 			username: username
 		}
-		var url = 'http://localhost:3000/updateFavoriteTeam';
+		var url = 'https://football-game-api.herokuapp.com/updateFavoriteTeam';
 		$http.post(url, info).success(function (data, status){
 			if(data.status == 'success'){
-				console.log(data)
 				primaryColor = data.favTeam.MainColor;
 				secondaryColor = data.favTeam.AccentColor;
 				image_url = data.favTeam.imageUrl;
 				favTeam = data.favTeam.name;
-
-			}else{
-				console.log(data)
 			}
 			$('body').css('background-image','url('+image_url+')')
 		})
@@ -154,7 +150,7 @@ footballApp.controller('loginController', ['$scope', '$http', '$cookies', functi
 	$('#login-wrapper').css('background-color','rgba(0,0,0,.8)')
 	$('body').css('background-image','url("media/NATTYCHAMPS.jpg")')
 	$scope.login = function(){
-		var url = "http://localhost:3000/login";
+		var url = "https://football-game-api.herokuapp.com/login";
 		var info = {
 			username: $scope.username,
 			password: $scope.password
@@ -184,7 +180,7 @@ footballApp.controller('loginController', ['$scope', '$http', '$cookies', functi
 }])
 
 footballApp.controller('registerController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
-	var url = "http://localhost:3000/teams";
+	var url = "https://football-game-api.herokuapp.com/teams";
 	$('body').css('background-image','url("media/NATTYCHAMPS.jpg")')
 	$('#register-wrapper').css('background-color','rgba(0,0,0,.8)')
 	$http.get(url).success(function (data){
@@ -193,7 +189,7 @@ footballApp.controller('registerController', ['$scope', '$http', '$cookies', fun
 
 
 	$scope.register = function(){
-		var url = "http://localhost:3000/signup";
+		var url = "https://football-game-api.herokuapp.com/signup";
 		var info = {
 			username: $scope.username,
 			password: $scope.password,
@@ -201,9 +197,7 @@ footballApp.controller('registerController', ['$scope', '$http', '$cookies', fun
 			favoriteTeam: $scope.favTeam
 		}
 		$scope.message = '';
-		console.log(info)
 		$http.post(url, info).success(function (data, status) {
-			console.log(data)
 			if(data.status == 'UserExistsError'){
 				$scope.message = data.message;
 			}
@@ -292,7 +286,7 @@ footballApp.controller('setupController', ['$scope', '$http', '$cookies', functi
 		window.location.href = "#/"
 	}
 	$('body').css('background-image','url('+image_url+')')
-	$('#header').html('<a href="#/" class="btn btn-primary">Home</a><a href="#/profile" class="btn btn-success">Profile</a>')
+	$('#select-header').html('<a href="#/" class="btn btn-primary">Home</a><a href="#/profile" class="btn btn-success">Profile</a>')
 	$('#home-container p').css('background-color',primaryColor)
 	$('#home-container p').css('color',secondaryColor)
 	$('#home-teams').css('background-color',primaryColor)
@@ -303,7 +297,7 @@ footballApp.controller('setupController', ['$scope', '$http', '$cookies', functi
 	$('#away-teams').css('color',secondaryColor)
 	$('#submission').css('background-color',primaryColor)
 	$('#submission-link').css('color',secondaryColor)
-	var url = "http://localhost:3000/player-teams";
+	var url = "https://football-game-api.herokuapp.com/player-teams";
 	$http.post(url,{username: username}).success(function (data){
 		$scope.teams = data.docs[0].teams;
 	})
@@ -373,7 +367,6 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 	$('body').css('background-image','url('+image_url+')')
 		clearField();
 		$scope.team = startingTeam;
-		console.log(startingTeam);
 		$scope.homeTeam = Team1.name;
 		$scope.awayTeam = Team2.name;
 	$('.play-button').css('background-color',primaryColor)
@@ -381,7 +374,6 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 	$scope.makePlay = function(){	
 		var who = $(this)[0].player.id;
 		poss = this.$parent.team.team;
-		console.log(poss)
 		var type = $(this)[0].player.playType;
 		var speed = $(this)[0].player.speed;
 		var strength = $(this)[0].player.strength;
@@ -437,7 +429,6 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 	};
 	$scope.fieldGoal = function(){
 		var chances = Math.random()
-		console.log(poss);
 		if(poss == 'home'){
 			if(currYardLine>80){
 				homeScore = (Number(homeScore)+3);
@@ -911,19 +902,19 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 			$('#field-wrapper').empty();
 			
 			if(homeScore > awayScore){
-				console.log(homeScore,awayScore)
+
 				var html = '<div id="win-message>'+Team1.name+' has won the game!</div>';
 				alert("Game Over! "+Team1.name+ " has won the game.");
 				$('#field-wrapper').append(html);
 			}
 			if(awayScore > homeScore){
-				console.log(homeScore,awayScore)
+
 				var html = '<div id="win-message>'+Team2.name+' has won the game!</div>';
 				alert("Game Over! "+Team2.name+ " has won the game.");
 				$('#field-wrapper').append(html);
 			}
 			if(awayScore == homeScore){
-				console.log(homeScore,awayScore)
+
 				var html = '<div id="win-message>The game ended in a tie!</div>';
 				alert("The game ended in a tie!");
 				$('#field-wrapper').append(html);

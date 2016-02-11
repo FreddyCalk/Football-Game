@@ -2,16 +2,16 @@
 	<div id="header"></div>
 	<div id="edit-wrapper"></div>
 	<div id='profile-inner-wrapper'>
+		<h3>Update Your Favorite Team</h3>
 		<form id="update_team_form" ng-submit="teamUpdate()">
-			<label>Update Your Favorite Team
-				<select class="form-control " id="fav-team" name="favTeam" ng-model="favTeam" required>
+				<label>Team<select class="form-control " id="fav-team" name="favTeam" ng-model="favTeam" required>
 					<option ng-selected="{{team.name == favTeam}}" ng-repeat="team in teams | orderBy: 'name'" value="{{team.name}}">{{team.name}}</option>
-				</select>
-			</label><br/>
+				</select></label><br/>
 			<input type='submit' class="btn btn-warning profile-button" value='Update Team'>
 		</form>
+		<h3>Edit Players</h3>
 		<form id="update_player_form" ng-submit="playerUpdate()">
-			<label>Which Team
+			<label>Select Team
 				<select class="form-control" id="editTeam" name="editTeam" required>
 					<option value=""></option>
 					<option ng-repeat="team in teams | orderBy: 'name'" value="{{team.name}}">{{team.name}}</option>
