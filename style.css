@@ -292,12 +292,14 @@ body{
 	margin:auto;
 	text-align: center;
 }
-ul li{
-	list-style-type: none;
+ul, ol{
+	padding:0px;
 }
-ol li{
+ul li, ol li{
 	list-style-type: none;
+	margin:10px 0px;
 }
+
 #select-header{
 	width:860px;
 	padding: 0px 0px 20px 30px;

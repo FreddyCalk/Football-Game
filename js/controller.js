@@ -377,7 +377,7 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 	if(!primaryColor){
 		window.location.href = "#/";
 	}
-	$('#game-header').html('<input class="btn btn-danger" id="quit-game" value="Quit">');
+	$('#game-header').html('<input class="btn btn-danger" id="quit-game" type="submit" style="width:100px" value="Quit">');
 	$('#quit-game').click(function(){
 		var quit = window.confirm('All game data will be lost. Are you sure you want to quit?')
 		if(quit){
