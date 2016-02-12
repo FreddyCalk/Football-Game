@@ -96,7 +96,7 @@ footballApp.controller('profileController', function ($scope, $http){
 				}
 			}
 			$scope.$apply();
-		})
+		}).change();
 	})
 
 	$scope.playerUpdate = function(){

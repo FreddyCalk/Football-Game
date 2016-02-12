@@ -1,7 +1,7 @@
 body{
 	position:relative;
-/*	background-size: 100vw;
-	background-repeat: no-repeat;*/
+	background-size: 100vw;
+	background-repeat: no-repeat;
 }
 /*@media screen and(min-width: 1530px){
 	body{
@@ -131,6 +131,7 @@ body{
 	font-family: 'Black Ops One';
 	display:inline;
 	margin:5px;
+	border-radius: 10px;
 }
 #message-wrapper{
 	display:block;
@@ -295,9 +296,6 @@ ul li{
 }
 ol li{
 	list-style-type: none;
-}
-#update_team_form, #update_player_form{
-	border: 3px solid black;
 }
 #select-header{
 	width:1000px;
