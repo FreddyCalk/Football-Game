@@ -24,6 +24,8 @@ var secondaryColor = null;
 var image_url = null;
 var username = null;
 var favTeam = null;
+var playPrimaryColor = null;
+var playSecondaryColor = null;
 
 
 
@@ -343,10 +345,14 @@ footballApp.controller('coinFlipController', ['$scope', '$http', '$cookies', fun
 		}
 		if(choice == coin){
 			startingTeam = Team2.players;
+			playPrimaryColor = Team2.MainColor;
+			playSecondaryColor = Team2.AccentColor;
 			currYardLine = 80;
 			firstDownMarker = currYardLine - yardsToGo;
 		}else{
 			startingTeam = Team1.players;
+			playPrimaryColor = Team1.MainColor;
+			playSecondaryColor = Team1.AccentColor;
 		}
 
 		$('#coin').css('transition', 'all '+num*0.2+'s');
@@ -384,8 +390,6 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 		$scope.team = startingTeam;
 		$scope.homeTeam = Team1.name;
 		$scope.awayTeam = Team2.name;
-	$('.play-button').css('background-color',primaryColor)
-	$('.play-button').css('color',secondaryColor)
 	$scope.makePlay = function(){	
 		var who = $(this)[0].player.id;
 		poss = this.$parent.team.team;
@@ -461,6 +465,8 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 			firstDownMarker = currYardLine - 10;
 			firstDown();
 			$scope.team = Team2.players;
+			playPrimaryColor = Team2.MainColor;
+			playSecondaryColor = Team2.AccentColor;
 			if((homeScore < 10)&&(!homeAppended)&&(!miss)){
 				homeScore = '0'+homeScore;
 				homeAppended = true;
@@ -482,6 +488,8 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 			firstDownMarker = currYardLine + 10;
 			firstDown();
 			$scope.team = Team1.players;
+			playPrimaryColor = Team1.MainColor;
+			playSecondaryColor = Team1.AccentColor;
 			if((awayScore < 10)&&(!awayAppended)&&(!miss)){
 				awayScore = '0'+awayScore;
 				awayAppended = false;
@@ -513,6 +521,8 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 			firstDownMarker = currYardLine - 10;
 			firstDown();
 			$scope.team = Team2.players;
+			playPrimaryColor = Team2.MainColor;
+			playSecondaryColor = Team2.AccentColor;
 		}else if(poss == 'away'){
 			currYardLine -= distance;
 			if(currYardLine <= 0){
@@ -521,6 +531,8 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 			firstDownMarker = currYardLine + 10;
 			firstDown();
 			$scope.team = Team1.players;
+			playPrimaryColor = Team1.MainColor;
+			playSecondaryColor = Team1.AccentColor;
 		}
 		setYardLine();
 		possessionCounter++;
@@ -550,6 +562,8 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 				};
 				currYardLine = 80;
 				$scope.team = Team2.players;
+				playPrimaryColor = Team2.MainColor;
+				playSecondaryColor = Team2.AccentColor;
 				firstDownMarker = currYardLine - 10;
 				clearField();
 				firstDown();
@@ -563,6 +577,8 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 				};
 				currYardLine = 20;
 				$scope.team = Team1.players;
+				playPrimaryColor = Team1.MainColor;
+				playSecondaryColor = Team1.AccentColor;
 				firstDownMarker = currYardLine + 10;
 				clearField();
 				firstDown();
@@ -579,6 +595,8 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 				};
 				currYardLine = 20;
 				$scope.team = Team1.players;
+				playPrimaryColor = Team1.MainColor;
+				playSecondaryColor = Team1.AccentColor;
 				firstDownMarker = currYardLine + 10;
 				clearField();
 				firstDown();
@@ -592,6 +610,8 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 				};
 				currYardLine = 80;
 				$scope.team = Team2.players;
+				playPrimaryColor = Team2.MainColor;
+				playSecondaryColor = Team2.AccentColor;
 				firstDownMarker = currYardLine - 10;
 				clearField();
 				firstDown();
@@ -692,6 +712,8 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 				$('#special-teams').show();
 			}else if(currDown == 4){
 				$scope.team = Team2.players;
+				playPrimaryColor = Team2.MainColor;
+				playSecondaryColor = Team2.AccentColor;
 				alert('Turnover on Downs');
 				firstDown()
 				clearField();
@@ -714,6 +736,8 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 				$('#special-teams').show();
 			}else if(currDown == 4){
 				$scope.team = Team1.players;
+				playPrimaryColor = Team1.MainColor;
+				playSecondaryColor = Team1.AccentColor;
 				alert('Turnover on Downs');
 				firstDown();
 				clearField();
@@ -885,6 +909,8 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 			}
 			firstDown();
 			$scope.team = Team2.players;
+			playPrimaryColor = Team2.MainColor;
+			playSecondaryColor = Team2.AccentColor;
 			if(playType == 'run'){
 				alert('Fumble!')
 			}else if(playType == 'pass'){
@@ -900,6 +926,8 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 			}
 			firstDown();
 			$scope.team = Team1.players;
+			playPrimaryColor = Team1.MainColor;
+			playSecondaryColor = Team1.AccentColor;
 			if(playType == 'run'){
 				alert('Fumble!')
 			}else if(playType == 'pass'){
@@ -937,7 +965,7 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 		}
 	}
 	setInterval(function(){
-		$('.play-button').css('background-color',primaryColor)
-		$('.play-button').css('color',secondaryColor)
+		$('.play-button').css('background-color',playPrimaryColor)
+		$('.play-button').css('color',playSecondaryColor)
 	},0);
 }]);
