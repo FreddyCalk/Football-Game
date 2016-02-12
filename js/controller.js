@@ -389,6 +389,27 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 	$('#quit-game').click(function(){
 		var quit = window.confirm('All game data will be lost. Are you sure you want to quit?')
 		if(quit){
+			currYardLine = 20;
+			currDown = 1;
+			yardsToGo = 10;
+			firstDownMarker = currYardLine + yardsToGo;
+			latLoc = 190;
+			mod = 0.4;
+			moveUp = false;
+			homeAppended = false;
+			awayAppended = false;
+			startingTeam;
+			Team1;
+			Team2;
+			heads;
+			tails;
+			homeSymbol;
+			awaySymbol;
+			homeScore = '00';
+			awayScore = '00';
+			selectedTeams = [];
+			poss;
+			possessionCounter = 0;
 			window.location.href = '#/';
 		}
 
@@ -970,6 +991,27 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 				alert("The game ended in a tie!");
 				$('#game-wrapper').append(html);
 			}
+			currYardLine = 20;
+			currDown = 1;
+			yardsToGo = 10;
+			firstDownMarker = currYardLine + yardsToGo;
+			latLoc = 190;
+			mod = 0.4;
+			moveUp = false;
+			homeAppended = false;
+			awayAppended = false;
+			startingTeam;
+			Team1;
+			Team2;
+			heads;
+			tails;
+			homeSymbol;
+			awaySymbol;
+			homeScore = '00';
+			awayScore = '00';
+			selectedTeams = [];
+			poss;
+			possessionCounter = 0;
 		}
 	}
 	setInterval(function(){
