@@ -956,19 +956,19 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 
 				var html = '<div id="win-message>'+Team1.name+' has won the game!</div>';
 				alert("Game Over! "+Team1.name+ " has won the game.");
-				$('#field-wrapper').append(html);
+				$('#game-wrapper').append(html);
 			}
 			if(awayScore > homeScore){
 
 				var html = '<div id="win-message>'+Team2.name+' has won the game!</div>';
 				alert("Game Over! "+Team2.name+ " has won the game.");
-				$('#field-wrapper').append(html);
+				$('#game-wrapper').append(html);
 			}
 			if(awayScore == homeScore){
 
 				var html = '<div id="win-message>The game ended in a tie!</div>';
 				alert("The game ended in a tie!");
-				$('#field-wrapper').append(html);
+				$('#game-wrapper').append(html);
 			}
 		}
 	}

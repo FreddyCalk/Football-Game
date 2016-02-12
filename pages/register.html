@@ -11,14 +11,14 @@
 						<label>Username *
 						<input class="form-control text" placeholder="Username" name="username" ng-model="username" type="text" required>
 						</label>
-						<label>Password *
-						<input class="form-control text" placeholder="Password" name="password" ng-model="password" type="password" required></label><br/>
-						<label>Confirm Password *
-						<input class="form-control text" placeholder="Confirm Password" name="confirmPassword" ng-model="confirmPassword" type="password" required></label>
 						<label>Favorite Team *
 						<select class="form-control" id="fav-team" name="favTeam" ng-model="favTeam" required>
 							<option ng-repeat="team in teams | orderBy: 'name'" value="{{team.name}}">{{team.name}}</option>
 						</select></label><br/>
+						<label>Password *
+						<input class="form-control text" placeholder="Password" name="password" ng-model="password" type="password" required></label>
+						<label>Confirm Password *
+						<input class="form-control text" placeholder="Confirm Password" name="confirmPassword" ng-model="confirmPassword" type="password" required></label><br/>
 						<input class="btn btn-success" type="submit" value="Sign Up!">
 						<a href="#/"><input class = "btn btn-danger" type="button" value="Cancel"></a> 		
 					</div>
