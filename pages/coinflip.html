@@ -1,17 +1,20 @@
-<div id="header"></div>
-<div ng-controller="coinFlipController">
-	<div id="coin-wrapper">
-		<div id="message-wrapper">
-			<p id="message">{{teamName}}, make a selection</p>
-		</div><br/>
-		<button class = 'flip-button' type="submit" ng-click="coinFlip('heads')">Heads ({{homeSymbol}})</button>
-		<button class = 'flip-button' type="submit" ng-click="coinFlip('tails')">Tails ({{awaySymbol}})</button>
-	</div>
 
-		<div id="coin">	
-			<img id="tails" ng-src="{{tails}}">
-			<img id="heads" ng-src="{{heads}}">
+<div ng-controller="coinFlipController">
+<div id="coin-flip-header"></div>
+	<div id="coin-flip-wrapper">
+		<div id="coin-wrapper">
+			<div id="message-wrapper">
+				<p id="message">{{teamName}}, make a selection</p>
+			</div><br/>
+			<button class = 'flip-button' type="submit" ng-click="coinFlip('heads')">Heads ({{homeSymbol}})</button>
+			<button class = 'flip-button' type="submit" ng-click="coinFlip('tails')">Tails ({{awaySymbol}})</button>
 		</div>
+
+			<div id="coin">	
+				<img id="tails" ng-src="{{tails}}">
+				<img id="heads" ng-src="{{heads}}">
+			</div>
+	</div>
 </div>
 
 

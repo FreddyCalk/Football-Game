@@ -307,7 +307,7 @@ footballApp.controller('coinFlipController', ['$scope', '$http', '$cookies', fun
 	if(!primaryColor){
 		window.location.href = "#/"
 	}
-	$('#header').html('<a href="#/" class="btn btn-primary">Home</a>')
+	$('#coin-flip-header').html('<a href="#/" class="btn btn-primary">Home</a>')
 	$('body').css('background-image','url('+image_url+')')
 	$('#message').css('background-color',primaryColor)
 	$('#message').css('color',secondaryColor)
@@ -356,7 +356,7 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 	if(!primaryColor){
 		window.location.href = "#/";
 	}
-	$('#header').html('<input class="btn btn-danger" id="quit-game" value="Quit">');
+	$('#game-header').html('<input class="btn btn-danger" id="quit-game" value="Quit">');
 	$('#quit-game').click(function(){
 		var quit = window.confirm('All game data will be lost. Are you sure you want to quit?')
 		if(quit){
@@ -921,6 +921,9 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 			}
 		}
 	}
-
+	setInterval(function(){
+		$('.play-button').css('background-color',primaryColor)
+		$('.play-button').css('color',secondaryColor)
+	},0);
 }]);
 
