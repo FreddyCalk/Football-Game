@@ -104,6 +104,7 @@ footballApp.controller('profileController', function ($scope, $http){
 				if(allTeams[i].name == selectedTeam){
 					$scope.players = allTeams[i].players
 					whichTeam = i;
+					$scope.message = '';
 
 				}
 			}
@@ -135,6 +136,13 @@ footballApp.controller('profileController', function ($scope, $http){
 		$http.post(url, info).success(function(data,status){
 			if(data.status == 'success'){
 				$scope.teams = data.teams
+				$scope.message = "Changes saved successfully"
+				$scope.players = [];
+				$('#player-save-message').css('color','green')
+				$scope.$apply();
+			}else{
+				$scope.message = "The Server Failed"
+				$('#player-save-message').css('color','red')
 			}
 		})
 	}

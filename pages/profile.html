@@ -9,7 +9,8 @@
 				</select></label><br/>
 			<input type='submit' class="btn btn-warning profile-button" value='Update Team'>
 		</form>
-		<h3>Edit Players</h3>
+		<h3>Edit Players </h3>
+		<div id='player-save-message'>{{message}}</div>
 		<form id="update_player_form" ng-submit="playerUpdate()">
 			<label>Select Team
 				<select class="form-control" id="editTeam" name="editTeam" required>
@@ -22,6 +23,7 @@
 				<label class="attr-label">Player Speed: &nbsp&nbsp&nbsp<input class="player-stats" type="number" name="{{player.id}}_speed" min="0" max="100" value="{{player.speed}}"></label>
 			</div>
 			<input class="btn btn-warning profile-button" type="submit" value="Save Changes">
+
 		</form>
 	</div>
 </div>
