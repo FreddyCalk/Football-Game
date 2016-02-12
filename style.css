@@ -175,7 +175,7 @@ body{
 }
 #home-container, #away-container{
 	float:left;
-	margin: 0px 50px 0px 50px;
+	margin: 0px 50px 0px 40px;
 
 }
 #home-container p, #away-container p{
@@ -190,7 +190,7 @@ body{
 #team-wrapper{
 	margin-top: 50px;
 	overflow:hidden;
-	width:1000px;
+	width:980px;
 	margin:auto;
 }
 #home-teams, #away-teams{
@@ -207,7 +207,7 @@ body{
 	text-align: center;
 }
 #submission{
-	width: 830px;
+	width: 810px;
 	opacity: 0.9;
 	padding:10px;
 	font-size: 72px;
@@ -263,7 +263,8 @@ body{
 	margin-top:0px;
 }
 #profile-wrapper{
-	width:100vw;
+	width:800px;
+	margin:auto;
 	height:100vh;
 	color:white;
 }
@@ -298,8 +299,8 @@ ol li{
 	list-style-type: none;
 }
 #select-header{
-	width:1000px;
-	padding: 0px 0px 20px 100px;
+	width:860px;
+	padding: 0px 0px 20px 30px;
 	margin:auto;
 }
 #game-wrapper{

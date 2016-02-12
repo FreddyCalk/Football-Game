@@ -67,7 +67,12 @@ footballApp.controller('homeController', function ($scope, $http){
 		$('#home-header').html('<a href="#/signup" class="btn btn-primary">Sign Up</a><a href="#/login" class="btn btn-primary">Login</a>')
 		$('body').css('background-image','url("media/NATTYCHAMPS.jpg")')
 	}else{
-		$('#home-header').html('<a href="#/profile" class="btn btn-success">Profile</a><a href="#/selectSides" class="btn btn-primary">Pick Teams</a>')
+		var html = '<a href="#/profile" class="btn btn-success">Profile</a><a href="#/selectSides" class="btn btn-primary">Pick Teams</a>';
+		html += '<input class="btn btn-danger" id="logout" type="submit" style="float:right; width:75px" value="Logout">';
+		$('#home-header').html(html)
+		$('#logout').click(function(){
+			window.location.reload();
+		})
 	}
 })
 
@@ -78,7 +83,12 @@ footballApp.controller('profileController', function ($scope, $http){
 	var allTeams;
 	var whichTeam;
 	$scope.favTeam = favTeam;
-	$('#header').html('<a href="#/selectSides" class="btn btn-primary">Pick Teams</a><a href="#/" class="btn btn-primary">Home</a>')
+	var html = '<a href="#/" class="btn btn-primary">Home</a><a href="#/selectSides" class="btn btn-success">Pick Teams</a>';
+	html += '<input class="btn btn-danger" id="logout" type="submit" style="float:right; width:75px" value="Logout">';
+	$('#header').html(html)
+	$('#logout').click(function(){
+		window.location.reload();
+	})
 	var url = "https://football-game-api.herokuapp.com/player-teams";
 	$('body').css('background-image','url('+image_url+')')
 	$('#profile-wrapper').css('background-color','rgba(0,0,0,.8)')
@@ -286,7 +296,12 @@ footballApp.controller('setupController', ['$scope', '$http', '$cookies', functi
 		window.location.href = "#/"
 	}
 	$('body').css('background-image','url('+image_url+')')
-	$('#select-header').html('<a href="#/" class="btn btn-primary">Home</a><a href="#/profile" class="btn btn-success">Profile</a>')
+	var html = '<a href="#/" class="btn btn-primary">Home</a><a href="#/profile" class="btn btn-success">Profile</a>'
+	html += '<input class="btn btn-danger" id="logout" type="submit" style="float:right; width:75px" value="Logout">'
+	$('#select-header').html(html)
+	$('#logout').click(function(){
+		window.location.reload();
+	})
 	$('#home-container p').css('background-color',primaryColor)
 	$('#home-container p').css('color',secondaryColor)
 	$('#home-teams').css('background-color',primaryColor)
@@ -926,4 +941,3 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 		$('.play-button').css('color',secondaryColor)
 	},0);
 }]);
-
