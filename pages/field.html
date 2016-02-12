@@ -16,7 +16,7 @@
 		<div id="field-wrapper">
 			<canvas id="field" width='800px' height='377px'></canvas>
 			<div id='button-container'>
-					<button ng-repeat="player in team" class="play-button" ng-click="makePlay()" id="{{player.id}}">{{player.name}}<br/><span id="energy">{{player.energy}}%</span></button>
+					<button ng-repeat="player in team" class="play-button" ng-click="makePlay()" id="{{player.id}}">{{player.name}}<br/><span id="energy">Energy: {{player.energy}}%</span></button>
 			</div>
 			<div id='special-teams' style="display: none">
 				<button class="play-button" id="punt" ng-click="punt()">Punt</button>
