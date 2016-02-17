@@ -67,7 +67,7 @@ footballApp.config(function ($routeProvider){
 footballApp.controller('homeController', function ($scope, $http){
 	if(!username){
 		$('#home-header').html('<a href="#/signup" class="btn btn-primary">Sign Up</a><a href="#/login" class="btn btn-primary">Login</a>')
-		$('body').css('background-image','url("media/NATTYCHAMPS.jpg")')
+		$.backstretch("media/NATTYCHAMPS.jpg")
 	}else{
 		var html = '<a href="#/profile" class="btn btn-success">Profile</a><a href="#/selectSides" class="btn btn-primary">Pick Teams</a>';
 		html += '<input class="btn btn-danger" id="logout" type="submit" style="float:right; width:75px" value="Logout">';
@@ -92,7 +92,7 @@ footballApp.controller('profileController', function ($scope, $http){
 		window.location.reload();
 	})
 	var url = "https://football-game-api.herokuapp.com/player-teams";
-	$('body').css('background-image','url('+image_url+')')
+	$.backstretch(image_url);
 	$('#profile-wrapper').css('background-color','rgba(0,0,0,.8)')
 	$http.post(url,{username:username}).success(function (data){
 		$scope.teams = data.docs[0].teams;
@@ -160,7 +160,7 @@ footballApp.controller('profileController', function ($scope, $http){
 				image_url = data.favTeam.imageUrl;
 				favTeam = data.favTeam.name;
 			}
-			$('body').css('background-image','url('+image_url+')')
+			$.backstretch(image_url);
 		})
 	}
 
@@ -168,7 +168,6 @@ footballApp.controller('profileController', function ($scope, $http){
 
 footballApp.controller('loginController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
 	$('#login-wrapper').css('background-color','rgba(0,0,0,.8)')
-	$('body').css('background-image','url("media/NATTYCHAMPS.jpg")')
 	$scope.login = function(){
 		var url = "https://football-game-api.herokuapp.com/login";
 		var info = {
@@ -201,7 +200,6 @@ footballApp.controller('loginController', ['$scope', '$http', '$cookies', functi
 
 footballApp.controller('registerController', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies){
 	var url = "https://football-game-api.herokuapp.com/teams";
-	$('body').css('background-image','url("media/NATTYCHAMPS.jpg")')
 	$('#register-wrapper').css('background-color','rgba(0,0,0,.8)')
 	$http.get(url).success(function (data){
 		$scope.teams = data;
@@ -305,7 +303,7 @@ footballApp.controller('setupController', ['$scope', '$http', '$cookies', functi
 	if(!primaryColor){
 		window.location.href = "#/"
 	}
-	$('body').css('background-image','url('+image_url+')')
+	$.backstretch(image_url);
 	var html = '<a href="#/" class="btn btn-primary">Home</a><a href="#/profile" class="btn btn-success">Profile</a>'
 	html += '<input class="btn btn-danger" id="logout" type="submit" style="float:right; width:75px" value="Logout">'
 	$('#select-header').html(html)
@@ -333,7 +331,7 @@ footballApp.controller('coinFlipController', ['$scope', '$http', '$cookies', fun
 		window.location.href = "#/"
 	}
 	$('#coin-flip-header').html('<a href="#/" class="btn btn-primary">Home</a>')
-	$('body').css('background-image','url('+image_url+')')
+	$.backstretch(image_url);
 	$('#message').css('background-color',primaryColor)
 	$('#message').css('color',secondaryColor)
 	$('.flip-button').css('background-color',primaryColor)
@@ -414,7 +412,7 @@ footballApp.controller('gameController', ['$scope', '$http', '$cookies', functio
 		}
 
 	})
-	$('body').css('background-image','url('+image_url+')')
+	$.backstretch(image_url);
 		clearField();
 		$scope.team = startingTeam;
 		$scope.homeTeam = Team1.name;
